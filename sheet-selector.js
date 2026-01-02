@@ -156,71 +156,8 @@ function processSheetData(data, sheetName) {
         projectNameElement.textContent = sheetName;
     }
     
-    // Mapeo de columnas del Excel:
-    // app - Aplicación
-    // vertical - Vertical
-    // epica - Épica
-    // hu - Historia de Usuario
-    // cp_planificado - Casos de Prueba Planificados
-    // cp_diseñado_qa - Casos de Prueba Diseñados por QA (Equipo QA)
-    // cp_aprobado_dev - Casos de Prueba Aprobados por Desarrollo (Equipo Desarrollo)
-    // cp_aprobado_neg - Casos de Prueba Aprobados por Negocio (Equipo Negocio)
-    // cp_pendiente_dev - Casos de Prueba Pendientes Desarrollo (Equipo Desarrollo)
-    // cp_pendiente_neg - Casos de Prueba Pendientes Negocio (Equipo Negocio)
-    
-    // Calcular totales para las tarjetas KPI
-    let totalAplicaciones = new Set();
-    let totalVerticales = new Set();
-    let totalEpicas = new Set();
-    let totalHistorias = 0;
-    let totalCriterios = 0;
-    let totalDisenados = 0;
-    let totalRevisados = 0;
-    let totalAprobados = 0;
-    let totalPendientes = 0;
-    
-    data.forEach(row => {
-        // Contar aplicaciones únicas (solo si tiene valor no vacío)
-        if (row['app'] && row['app'].toString().trim() !== '') {
-            totalAplicaciones.add(row['app'].toString().trim());
-        }
-        
-        // Contar verticales únicas (solo si tiene valor no vacío)
-        if (row['vertical'] && row['vertical'].toString().trim() !== '') {
-            totalVerticales.add(row['vertical'].toString().trim());
-        }
-        
-        // Contar épicas únicas (solo si tiene valor no vacío)
-        if (row['epica'] && row['epica'].toString().trim() !== '') {
-            totalEpicas.add(row['epica'].toString().trim());
-        }
-        
-        // Contar historias de usuario (solo si tiene valor no vacío)
-        if (row['hu'] && row['hu'].toString().trim() !== '') {
-            totalHistorias++;
-        }
-        
-        // Sumar casos de prueba diseñados
-        if (row['cp_diseñado_qa']) totalDisenados += Number(row['cp_diseñado_qa']) || 0;
-        
-        // Sumar casos de prueba aprobados por desarrollo
-        if (row['cp_aprobado_dev']) totalRevisados += Number(row['cp_aprobado_dev']) || 0;
-        
-        // Sumar casos de prueba aprobados por negocio
-        if (row['cp_aprobado_neg']) totalAprobados += Number(row['cp_aprobado_neg']) || 0;
-    });
-    
-    // Actualizar las tarjetas KPI
-    updateKPI('plannedTests', totalAplicaciones.size); // APLICACIONES
-    updateKPI('verticalTests', totalVerticales.size); // VERTICALES
-    updateKPI('successfulTests', totalEpicas.size); // ÉPICAS
-    updateKPI('failedTests', totalHistorias); // HISTORIAS DE USUARIO
-    updateKPI('blockedTests', totalDisenados); // CASOS DE PRUEBA DISEÑADOS
-    updateKPI('dismissedTests', totalAprobados); // CASOS DE PRUEBA APROBADOS
-    
-    // Calcular progreso general (aprobados / diseñados * 100)
-    const progresoGeneral = totalDisenados > 0 ? Math.round((totalAprobados / totalDisenados) * 100) : 0;
-    updateProgressPercentage(progresoGeneral);
+    // Actualizar métricas dinámicas (KPIs, progreso general y porcentajes individuales)
+    updateDynamicMetrics(data);
     
     // Actualizar tabla
     updateProgressTable(data);
