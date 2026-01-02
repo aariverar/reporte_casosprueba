@@ -5170,7 +5170,7 @@ function handlePDFGeneration() {
 // Función principal para generar el PDF exactamente como el dashboard
 async function generatePDFReport() {
     // Mostrar mensaje de carga
-    showNotification('Generando reporte PDF idéntico al dashboard...', 'info');
+    showNotification('Generando reporte PDF...', 'info');
     
     try {
         // Verificar si las librerías están disponibles
@@ -5199,140 +5199,180 @@ async function generatePDFReport() {
         const contentWidth = pageWidth - (margin * 2);
         let currentY = margin;
         
-        console.log('📄 Iniciando generación PDF idéntico al dashboard...');
+        console.log('📄 Iniciando generación PDF del dashboard...');
         
-        // === PÁGINA ÚNICA: HEADER + INFORMACIÓN DEL PROYECTO + KPIs + GRÁFICOS ===
+        // === HEADER ===
         await addPDFHeader(pdf, currentY);
-        currentY += 25; // Reducido de 30 a 25
+        currentY += 25;
         
-        // 1. CAPTURAR INFORMACIÓN DEL PROYECTO (compacta)
-        console.log('📸 Capturando información del proyecto compacta...');
+        // 1. CAPTURAR AVANCE GENERAL (Información del Proyecto)
+        console.log('📸 Capturando Avance General...');
         const projectSection = document.querySelector('.project-section');
         if (projectSection) {
             try {
                 const projectCanvas = await html2canvas(projectSection, {
-                    scale: 1.5, // Reducido de 2 a 1.5
+                    scale: 2,
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    logging: false,
-                    width: projectSection.scrollWidth,
-                    height: projectSection.scrollHeight
+                    logging: false
                 });
                 
                 const projectImgData = projectCanvas.toDataURL('image/png');
                 const projectImgWidth = contentWidth;
-                const originalProjectHeight = (projectCanvas.height * projectImgWidth) / projectCanvas.width;
+                const projectImgHeight = (projectCanvas.height * projectImgWidth) / projectCanvas.width;
                 
-                // Limitar la altura máxima del proyecto para que quepa todo
-                const maxProjectHeight = 50; // Máximo 50mm para información del proyecto
-                const projectImgHeight = Math.min(originalProjectHeight, maxProjectHeight);
+                // Verificar si cabe en la página actual
+                if (currentY + projectImgHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
                 
                 pdf.addImage(projectImgData, 'PNG', margin, currentY, projectImgWidth, projectImgHeight);
-                currentY += projectImgHeight + 5; // Reducido espacio
-                console.log('✅ Información del proyecto capturada (compacta)');
+                currentY += projectImgHeight + 5;
+                console.log('✅ Avance General capturado');
             } catch (error) {
-                console.warn('⚠️ Error capturando información del proyecto:', error);
-                currentY += 10;
+                console.warn('⚠️ Error capturando Avance General:', error);
             }
         }
         
-        // 2. CAPTURAR TARJETAS KPI (compactas)
-        console.log('📸 Capturando tarjetas KPI compactas...');
+        // 2. CAPTURAR TARJETAS KPI
+        console.log('📸 Capturando tarjetas KPI...');
         const kpiSection = document.querySelector('.kpi-section');
         if (kpiSection) {
             try {
                 const kpiCanvas = await html2canvas(kpiSection, {
-                    scale: 1.5, // Reducido de 2 a 1.5
+                    scale: 2,
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    logging: false,
-                    width: kpiSection.scrollWidth,
-                    height: kpiSection.scrollHeight
+                    logging: false
                 });
                 
                 const kpiImgData = kpiCanvas.toDataURL('image/png');
                 const kpiImgWidth = contentWidth;
-                const originalKpiHeight = (kpiCanvas.height * kpiImgWidth) / kpiCanvas.width;
+                const kpiImgHeight = (kpiCanvas.height * kpiImgWidth) / kpiCanvas.width;
                 
-                // Limitar la altura máxima de KPIs
-                const maxKpiHeight = 35; // Máximo 35mm para KPIs
-                const kpiImgHeight = Math.min(originalKpiHeight, maxKpiHeight);
+                // Verificar si cabe en la página actual
+                if (currentY + kpiImgHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
                 
                 pdf.addImage(kpiImgData, 'PNG', margin, currentY, kpiImgWidth, kpiImgHeight);
-                currentY += kpiImgHeight + 5; // Reducido espacio
-                console.log('✅ Tarjetas KPI capturadas (compactas)');
+                currentY += kpiImgHeight + 5;
+                console.log('✅ Tarjetas KPI capturadas');
             } catch (error) {
                 console.warn('⚠️ Error capturando tarjetas KPI:', error);
-                currentY += 10;
             }
         }
         
-        // === CONTINUAR EN LA MISMA PÁGINA: GRÁFICOS SIN TÍTULO ===
-        // Verificar espacio disponible, si no hay suficiente, usar nueva página
-        const remainingSpace = pageHeight - currentY - margin;
-        const minSpaceNeeded = 120; // Espacio mínimo para gráficos
-        
-        if (remainingSpace < minSpaceNeeded) {
-            pdf.addPage();
-            currentY = margin;
-        }
-        
-        // 3. CAPTURAR TODA LA SECCIÓN DE GRÁFICOS DE UNA VEZ (SIN TÍTULO)
-        console.log('📸 Capturando sección completa de gráficos compacta...');
-        const chartsSection = document.querySelector('.charts-section');
-        if (chartsSection) {
+        // 3. CAPTURAR PORCENTAJES DE AVANCE INDIVIDUAL
+        console.log('📸 Capturando Porcentajes de Avance Individual...');
+        const individualProgressSection = document.querySelector('.individual-progress-section');
+        if (individualProgressSection) {
             try {
-                // Capturar toda la sección de gráficos como una sola imagen
-                const chartsCanvas = await html2canvas(chartsSection, {
-                    scale: 1.2, // Reducido de 1.5 a 1.2 para que sea más compacto
+                const progressCanvas = await html2canvas(individualProgressSection, {
+                    scale: 2,
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    logging: false,
-                    width: chartsSection.scrollWidth,
-                    height: chartsSection.scrollHeight
+                    logging: false
                 });
                 
-                const chartsImgData = chartsCanvas.toDataURL('image/png');
-                const maxChartsWidth = contentWidth;
-                const originalChartsHeight = (chartsCanvas.height * maxChartsWidth) / chartsCanvas.width;
+                const progressImgData = progressCanvas.toDataURL('image/png');
+                const progressImgWidth = contentWidth;
+                const progressImgHeight = (progressCanvas.height * progressImgWidth) / progressCanvas.width;
                 
-                // Calcular el espacio disponible en la página actual
-                const availableHeight = pageHeight - currentY - margin - 10; // 10mm para footer
-                
-                // Si los gráficos caben en el espacio restante, mantenerlos en la misma página
-                if (originalChartsHeight <= availableHeight) {
-                    pdf.addImage(chartsImgData, 'PNG', margin, currentY, maxChartsWidth, originalChartsHeight);
-                    console.log('✅ Todos los gráficos incluidos en la misma página');
-                } else {
-                    // Escalar los gráficos para que quepan en el espacio disponible
-                    const scaledHeight = availableHeight;
-                    const scaledWidth = (chartsCanvas.width * scaledHeight) / chartsCanvas.height;
-                    
-                    // Si el ancho escalado es menor que el ancho disponible, usar ese tamaño
-                    if (scaledWidth <= maxChartsWidth) {
-                        const centerX = margin + (maxChartsWidth - scaledWidth) / 2;
-                        pdf.addImage(chartsImgData, 'PNG', centerX, currentY, scaledWidth, scaledHeight);
-                        console.log('✅ Gráficos escalados para caber en una página');
-                    } else {
-                        // Si aún no cabe, usar el ancho completo y escalar proporcionalmente
-                        const finalHeight = Math.min(originalChartsHeight, availableHeight * 0.9);
-                        pdf.addImage(chartsImgData, 'PNG', margin, currentY, maxChartsWidth, finalHeight);
-                        console.log('✅ Gráficos comprimidos para una página');
-                    }
+                // Verificar si cabe en la página actual
+                if (currentY + progressImgHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    currentY = margin;
                 }
                 
+                pdf.addImage(progressImgData, 'PNG', margin, currentY, progressImgWidth, progressImgHeight);
+                currentY += progressImgHeight + 5;
+                console.log('✅ Porcentajes de Avance Individual capturados');
             } catch (error) {
-                console.warn('⚠️ Error capturando sección de gráficos:', error);
-                
-                // Fallback: capturar gráficos individualmente de forma compacta
-                await captureIndividualChartsCompact(pdf, margin, contentWidth, pageHeight, currentY);
+                console.warn('⚠️ Error capturando Porcentajes de Avance Individual:', error);
             }
-        } else {
-            // Fallback: capturar gráficos individualmente de forma compacta
-            await captureIndividualChartsCompact(pdf, margin, contentWidth, pageHeight, currentY);
+        }
+        
+        // 4. CAPTURAR TABLA DE DETALLE DE PROGRESO
+        console.log('📸 Capturando tabla de Detalle de Progreso...');
+        const tableSection = document.querySelector('.table-section');
+        if (tableSection) {
+            try {
+                // Guardar la paginación actual
+                const paginationContainer = tableSection.querySelector('.pagination-container');
+                const originalPaginationDisplay = paginationContainer ? paginationContainer.style.display : '';
+                
+                // Ocultar controles de paginación para el PDF
+                if (paginationContainer) {
+                    paginationContainer.style.display = 'none';
+                }
+                
+                const tableCanvas = await html2canvas(tableSection, {
+                    scale: 1.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+                
+                // Restaurar controles de paginación
+                if (paginationContainer) {
+                    paginationContainer.style.display = originalPaginationDisplay;
+                }
+                
+                const tableImgData = tableCanvas.toDataURL('image/png');
+                const tableImgWidth = contentWidth;
+                const tableImgHeight = (tableCanvas.height * tableImgWidth) / tableCanvas.width;
+                
+                // Verificar si cabe en la página actual
+                if (currentY + tableImgHeight > pageHeight - margin) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
+                
+                // Si la tabla es muy alta, dividirla en múltiples páginas
+                if (tableImgHeight > pageHeight - margin * 2) {
+                    const maxHeight = pageHeight - margin * 2;
+                    let remainingHeight = tableImgHeight;
+                    let sourceY = 0;
+                    
+                    while (remainingHeight > 0) {
+                        const heightToAdd = Math.min(remainingHeight, maxHeight);
+                        const sourceHeight = (heightToAdd * tableCanvas.height) / tableImgHeight;
+                        
+                        // Crear un canvas temporal para esta sección
+                        const tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = tableCanvas.width;
+                        tempCanvas.height = sourceHeight;
+                        const tempCtx = tempCanvas.getContext('2d');
+                        tempCtx.drawImage(tableCanvas, 0, sourceY, tableCanvas.width, sourceHeight, 0, 0, tableCanvas.width, sourceHeight);
+                        
+                        const tempImgData = tempCanvas.toDataURL('image/png');
+                        pdf.addImage(tempImgData, 'PNG', margin, margin, tableImgWidth, heightToAdd);
+                        
+                        remainingHeight -= heightToAdd;
+                        sourceY += sourceHeight;
+                        
+                        if (remainingHeight > 0) {
+                            pdf.addPage();
+                        }
+                    }
+                    
+                    currentY = margin + (tableImgHeight % maxHeight);
+                } else {
+                    pdf.addImage(tableImgData, 'PNG', margin, currentY, tableImgWidth, tableImgHeight);
+                    currentY += tableImgHeight;
+                }
+                
+                console.log('✅ Tabla de Detalle de Progreso capturada');
+            } catch (error) {
+                console.warn('⚠️ Error capturando tabla de Detalle de Progreso:', error);
+            }
         }
         
         // Agregar footer en todas las páginas
@@ -5342,17 +5382,16 @@ async function generatePDFReport() {
         document.body.classList.remove('pdf-mode');
         
         // Generar nombre del archivo
-        const projectName = testData.projectInfo.name || 'Dashboard QA';
         const currentDate = new Date().toLocaleDateString('es-ES').replace(/\//g, '-');
-        const fileName = `Reporte_QA_${projectName.replace(/\s+/g, '_')}_${currentDate}.pdf`;
+        const fileName = `Dashboard_QA_Diseño_Casos_Prueba_${currentDate}.pdf`;
         
         console.log('💾 Guardando PDF:', fileName);
-        console.log('📊 PDF generado exactamente como el dashboard (sin tablas)');
+        console.log('📊 PDF generado con todas las secciones del dashboard');
         
         // Descargar el PDF
         pdf.save(fileName);
         
-        showNotification('PDF generado exactamente como el dashboard', 'success');
+        showNotification('PDF generado exitosamente', 'success');
         
     } catch (error) {
         console.error('Error generando PDF:', error);
@@ -6590,3 +6629,27 @@ function updateDeliverablesChart() {
 
     Plotly.newPlot('deliverablesChart', [trace], layout, config);
 }
+
+// Sobrescribir la funci�n handleFileUpload para usar el nuevo selector de hojas
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('excelFile');
+    if (fileInput) {
+        fileInput.removeEventListener('change', handleFileUpload);
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const fileName = file.name.toLowerCase();
+            
+            if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                // Usar el nuevo manejador con selector de hojas
+                handleExcelFileWithSheets(file);
+            } else if (fileName.endsWith('.csv')) {
+                handleCSVFile(file);
+            } else {
+                showNotification('Formato de archivo no soportado. Use .xlsx, .xls o .csv', 'error');
+                event.target.value = '';
+            }
+        });
+    }
+});

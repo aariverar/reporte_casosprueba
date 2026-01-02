@@ -9,7 +9,7 @@
     <meta http-equiv="Expires" content="0">
     <meta http-equiv="Last-Modified" content="0">
     <meta http-equiv="If-Modified-Since" content="0">
-    <title>Santander Consumer Bank - Dashboard Aseguramiento Calidad | Ejecución Diaria de Pruebas</title>
+    <title>Santander Consumer Bank - Dashboard Aseguramiento Calidad | Diseño Casos de Prueba</title>
     <link rel="stylesheet" href="styles.css?v=20251103">
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -27,26 +27,13 @@
                 <div class="logo-section">
                     <div class="logo">
                         <i class="fas fa-chart-line"></i>
-                        <h1>Santander Consumer Bank - Dashboard Aseguramiento Calidad</h1>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-name" id="projectName">Proyecto: Building Block - Core</div>
-                        <div class="project-dates">
-                            <span class="report-period">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="reportStartDate">01/09/2024</span> - <span id="reportEndDate">30/09/2024</span>
-                            </span>
-                        </div>
+                        <h1>Santander Consumer Bank - Dashboard Diseño de Casos de Prueba</h1>
                     </div>
                 </div>
                 <div class="header-actions">
                     <div class="date-info">
                         <i class="fas fa-calendar-check"></i>
                         <span>Generado: <span id="currentDate"></span></span>
-                    </div>
-                    <div class="report-status">
-                        <span class="status-label">Estado:</span>
-                        <span class="status-badge" id="reportStatus">Pruebas QA</span>
                     </div>
                     <div class="file-upload-container">
                         <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="display: none;">
@@ -56,7 +43,7 @@
                         </button>
                         <button class="btn-share" id="selectProjectButton" onclick="openProjectSelector()" style="display: none;">
                             <i class="fas fa-list-alt"></i>
-                            Seleccionar Proyecto
+                            Seleccionar Building Block
                         </button>
                         <button class="btn-pdf" onclick="handlePDFGeneration()">
                             <i class="fas fa-file-pdf"></i>
@@ -71,59 +58,16 @@
         <main class="main-content">
             <!-- Project Information -->
             <section class="project-section">
-                <div class="project-details-card">
-                    <div class="project-header">
-                        <h3><i class="fas fa-project-diagram"></i> Información del Proyecto</h3>
+                <div class="project-container-modern">
+                    <div class="project-header-modern">
+                        <h3><i class="fas fa-project-diagram"></i>Avance de Diseño de Casos de Prueba Aprobados</h3>
                     </div>
-                    <div class="project-details-grid">
-                        <div class="detail-item">
-                            <label>Nombre del Proyecto:</label>
-                            <span id="projectNameDetail">Building Block - Core</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Responsable QA:</label>
-                            <span id="qaResponsible">María González</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Fecha de Inicio:</label>
-                            <span id="projectStartDate">01/09/2024</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Fecha de Cierre:</label>
-                            <span id="projectEndDate">30/09/2024</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Estado del Proyecto:</label>
-                            <span class="project-status" id="projectStatusDetail">Pruebas QA</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Progreso del Proyecto:</label>
-                            <div class="dual-progress-container">
-                                <!-- Progreso Planificado -->
-                                <div class="progress-item">
-                                    <div class="progress-label">
-                                        <span>Progreso Planificado:</span>
-                                    </div>
-                                    <div class="progress-row">
-                                        <span class="progress-percentage" id="plannedProgressText">65.0%</span>
-                                        <div class="progress-bar planned-progress">
-                                            <div class="progress-fill planned-fill" id="plannedProgress" style="width: 65%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Progreso Real -->
-                                <div class="progress-item">
-                                    <div class="progress-label">
-                                        <span>Progreso Real:</span>
-                                    </div>
-                                    <div class="progress-row">
-                                        <span class="progress-percentage" id="realProgressText">75.0%</span>
-                                        <div class="progress-bar real-progress">
-                                            <div class="progress-fill real-fill" id="realProgress" style="width: 75%"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="project-title-section">
+                        <div class="percentage-card-centered">
+                            <div class="percentage-circle">
+                                <span class="percentage-value" id="generalProgressPercentage">0%</span>
                             </div>
+                            <p class="percentage-label">% CASOS DE PRUEBA APROBADOS</p>
                         </div>
                     </div>
                 </div>
@@ -136,9 +80,9 @@
                         <i class="fas fa-calendar-check"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Planificadas</h3>
+                        <h3>APLICACIONES</h3>
                         <div class="kpi-value">
-                            <span class="number" id="plannedTests">45</span>
+                            <span class="number" id="plannedTests">0</span>
                             <span class="percentage" title="Porcentaje del total aún por ejecutar">30%</span>
                         </div>
                     </div>
@@ -149,9 +93,9 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Exitosas</h3>
+                        <h3>EPICAS</h3>
                         <div class="kpi-value">
-                            <span class="number" id="successfulTests">85</span>
+                            <span class="number" id="successfulTests">0</span>
                             <span class="percentage" title="Porcentaje del total completado exitosamente">57%</span>
                         </div>
                     </div>
@@ -162,9 +106,9 @@
                         <i class="fas fa-times-circle"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Fallidas</h3>
+                        <h3>HISTORIAS DE USUARIO</h3>
                         <div class="kpi-value">
-                            <span class="number" id="failedTests">15</span>
+                            <span class="number" id="failedTests">0</span>
                             <span class="percentage" title="Porcentaje del total con fallas">10%</span>
                         </div>
                     </div>
@@ -175,9 +119,9 @@
                         <i class="fas fa-clock"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Pendientes</h3>
+                        <h3>CRITERIOS DE ACEPTACION</h3>
                         <div class="kpi-value">
-                            <span class="number" id="pendingTests">5</span>
+                            <span class="number" id="pendingTests">0</span>
                             <span class="percentage" title="Porcentaje del total en estado pendiente">3%</span>
                         </div>
                     </div>
@@ -188,7 +132,7 @@
                         <i class="fas fa-ban"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Bloqueadas</h3>
+                        <h3>CASOS DE PRUEBA DISEÑADOS</h3>
                         <div class="kpi-value">
                             <span class="number" id="blockedTests">0</span>
                             <span class="percentage" title="Porcentaje del total bloqueadas">0%</span>
@@ -201,7 +145,7 @@
                         <i class="fas fa-trash-alt"></i>
                     </div>
                     <div class="kpi-info">
-                        <h3>Pruebas Desestimadas</h3>
+                        <h3>CASOS DE PRUEBA APROBADOS</h3>
                         <div class="kpi-value">
                             <span class="number" id="dismissedTests">0</span>
                             <span class="percentage" title="Porcentaje del total desestimadas">0%</span>
@@ -210,219 +154,47 @@
                 </div>
             </section>
 
-            <!-- Charts Section -->
-            <section class="charts-section">
-                <!-- Test Results Overview -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('pie', 'Resumen de Resultados')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Resumen de Resultados</h3>
+            <!-- Individual Progress Percentages Section -->
+            <section class="individual-progress-section">
+                <div class="project-container-modern">
+                    <div class="project-header-modern">
+                        <h3><i class="fas fa-chart-line"></i>Porcentajes de Avance Individual</h3>
                     </div>
-                    <div id="pieChart" class="chart"></div>
-                </div>
-
-                <!-- Test Execution Trend -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('trend', 'Tendencia de Ejecución del Proyecto')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Tendencia de Ejecución del Proyecto</h3>
-                        <div class="legend">
-                            <span class="legend-item planned"><span class="dot"></span>Planificadas</span>
-                            <span class="legend-item success"><span class="dot"></span>Exitosas</span>
-                            <span class="legend-item failure"><span class="dot"></span>Fallidas</span>
-                            <span class="legend-item pending"><span class="dot"></span>Pendientes</span>
-                            <span class="legend-item blocked"><span class="dot"></span>Bloqueadas</span>
+                    <div class="individual-progress-grid">
+                        <div class="progress-indicator-card">
+                            <div class="progress-circle-small">
+                                <span class="progress-value-small" id="designProgressPercentage">0%</span>
+                            </div>
+                            <p class="progress-label-small">% Avance Diseño CP<br>(Equipo QA)</p>
                         </div>
-                    </div>
-                    <div id="trendChart" class="chart"></div>
-                </div>
-
-                <!-- Test Categories -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('category', 'Pruebas por Escenario')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Pruebas por Escenario</h3>
-                    </div>
-                    <div id="categoryChart" class="chart"></div>
-                </div>
-
-                <!-- Defects Management -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('defects', 'Gestión de Defectos')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Gestión de Defectos</h3>
-                        <div class="defects-stats">
-                            <span class="defect-stat critical">Críticos: <strong id="criticalDefects">2</strong></span>
-                            <span class="defect-stat high">Altos: <strong id="highDefects">5</strong></span>
-                            <span class="defect-stat medium">Medios: <strong id="mediumDefects">8</strong></span>
-                            <span class="defect-stat low">Bajos: <strong id="lowDefects">3</strong></span>
+                        
+                        <div class="progress-indicator-card">
+                            <div class="progress-circle-small">
+                                <span class="progress-value-small" id="reviewProgressPercentage">0%</span>
+                            </div>
+                            <p class="progress-label-small">% Avance Aprobaciones CP (Equipo Desarrollo)</p>
                         </div>
-                    </div>
-                    <div id="defectsChart" class="chart"></div>
-                </div>
-
-                <!-- Time To Fix Chart -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('burndown', 'Time To Fix')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Time To Fix</h3>
-                        <div class="burndown-legend">
-                            <span class="legend-item"><span class="dot critical" style="background: #dc2626;"></span>Crítica</span>
-                            <span class="legend-item"><span class="dot high" style="background: #ea580c;"></span>Alta</span>
-                            <span class="legend-item"><span class="dot medium" style="background: #d97706;"></span>Media</span>
-                            <span class="legend-item"><span class="dot low" style="background: #16a34a;"></span>Baja</span>
-                            <span class="legend-item"><span class="dot trend" style="background: #6366f1;"></span>Tendencia</span>
+                        
+                        <div class="progress-indicator-card">
+                            <div class="progress-circle-small">
+                                <span class="progress-value-small" id="approvalProgressPercentage">0%</span>
+                            </div>
+                            <p class="progress-label-small">% Avance Aprobaciones CP (Equipo Negocio)</p>
                         </div>
-                    </div>
-                    <div id="burndownChart" class="chart"></div>
-                </div>
-
-                <!-- Module Coverage -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('coverage', 'Cobertura por Módulo')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Cobertura por Módulo</h3>
-                        <div class="coverage-stats">
-                            <span class="coverage-stat">Cobertura Promedio: <strong id="avgCoverage">0%</strong></span>
-                            <span class="coverage-stat">Módulos Completos: <strong id="completeModules">0</strong></span>
+                        
+                        <div class="progress-indicator-card">
+                            <div class="progress-circle-small">
+                                <span class="progress-value-small" id="pendingProgressPercentage">0%</span>
+                            </div>
+                            <p class="progress-label-small">% Pendiente Aprobación<br>(Equipo Desarrollo)</p>
                         </div>
-                    </div>
-                    <div id="coverageChart" class="chart"></div>
-                </div>
-
-                <!-- Daily Execution by Tester Chart -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('dailyExecution', 'Ejecución Diaria por Ejecutor')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Ejecución Diaria por Ejecutor</h3>
-                        <div class="execution-stats">
-                            <span class="execution-stat">Total Ejecutores: <strong id="totalExecutors">0</strong></span>
-                            <span class="execution-stat">Promedio Diario: <strong id="avgDailyExecution">0</strong></span>
+                        
+                        <div class="progress-indicator-card">
+                            <div class="progress-circle-small">
+                                <span class="progress-value-small" id="pendingApprovalProgressPercentage">0%</span>
+                            </div>
+                            <p class="progress-label-small">% Pendiente Aprobación<br>(Equipo Negocio)</p>
                         </div>
-                    </div>
-                    <div id="dailyExecutionChart" class="chart"></div>
-                </div>
-
-                <!-- Total Execution by Tester Pie Chart -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('executorDistribution', 'Distribución Total por Ejecutor')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3>Distribución Total por Ejecutor</h3>
-                    </div>
-                    <div id="executorDistributionChart" class="chart"></div>
-                </div>
-
-                <!-- Project Deliverables Status -->
-                <div class="chart-container">
-                    <button class="chart-expand-btn" onclick="expandChart('deliverables', 'Estado de Entregables del Proyecto')" title="Ver ampliado">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                    <div class="chart-header">
-                        <h3><i class="fas fa-file-alt"></i> Estado de Entregables</h3>
-                    </div>
-                    <div id="deliverablesChart" class="chart"></div>
-                </div>
-            </section>
-
-            <!-- Defects Details Table -->
-            <section class="table-section defects-details">
-                <div class="table-header">
-                    <h3><i class="fas fa-bug"></i> Detalle de Defectos</h3>
-                    <div class="table-controls">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Buscar defectos..." id="defectsSearchInput">
-                        </div>
-                        <div class="filter-controls">
-                            <select id="severityFilter">
-                                <option value="">Todas las severidades</option>
-                                <option value="Crítica">Crítica</option>
-                                <option value="Alta">Alta</option>
-                                <option value="Media">Media</option>
-                                <option value="Baja">Baja</option>
-                            </select>
-                            <select id="statusFilter">
-                                <option value="">Todos los estados</option>
-                                <option value="Open">Open</option>
-                                <option value="Reject">Reject</option>
-                                <option value="Assigned">Assigned</option>
-                                <option value="Under Review">Under Review</option>
-                                <option value="In Progress DEV">In Progress DEV</option>
-                                <option value="Resolved">Resolved</option>
-                                <option value="ReTesting">ReTesting</option>
-                                <option value="ReOpened">ReOpened</option>
-                                <option value="Closed">Closed</option>
-                            </select>
-                        </div>
-                        <button class="btn-export" onclick="exportDefects()">
-                            <i class="fas fa-download"></i>
-                            Exportar
-                        </button>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <table class="defects-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Severidad</th>
-                                <th>Estado</th>
-                                <th>CP Impactados</th>
-                                <th>Asignado a</th>
-                                <th>Fecha Encontrado</th>
-                                <th>Días Abierto</th>
-                            </tr>
-                        </thead>
-                        <tbody id="defectsTableBody">
-                            <!-- Datos dinámicos -->
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Controles de paginación para defectos -->
-                <div class="pagination-container">
-                    <div class="pagination-info">
-                        <span id="defectsPaginationInfo">Mostrando 1-5 de 0 registros</span>
-                    </div>
-                    <div class="pagination-controls">
-                        <button id="defectsPrevPageBtn" class="pagination-btn" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                            Anterior
-                        </button>
-                        <div class="page-numbers" id="defectsPageNumbers">
-                            <!-- Números de página dinámicos -->
-                        </div>
-                        <button id="defectsNextPageBtn" class="pagination-btn">
-                            Siguiente
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="items-per-page">
-                        <label>Mostrar:</label>
-                        <select id="defectsItemsPerPageSelect">
-                            <option value="5" selected>5</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">Todos</option>
-                        </select>
-                        <span>por página</span>
                     </div>
                 </div>
             </section>
@@ -430,39 +202,40 @@
             <!-- Test Details Table -->
             <section class="table-section">
                 <div class="table-header">
-                    <h3>Detalles de Ejecución</h3>
+                    <h3>Detalle de Progreso</h3>
                     <div class="table-controls">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" placeholder="Buscar por ID, nombre, escenario, estado o ejecutor..." id="searchInput">
-                        </div>
                         <div class="filter-controls">
-                            <select id="testStatusFilter">
-                                <option value="">Todos los estados</option>
-                                <option value="planned">Planificada</option>
-                                <option value="success">Exitosa</option>
-                                <option value="failure">Fallida</option>
-                                <option value="pending">Pendiente</option>
-                                <option value="blocked">Bloqueada</option>
-                                <option value="dismissed">Desestimado</option>
+                            <select id="filterAplicacion">
+                                <option value="">Todas las Aplicaciones</option>
                             </select>
+                            <select id="filterVertical">
+                                <option value="">Todos los Verticales</option>
+                            </select>
+                            <select id="filterEpica">
+                                <option value="">Todas las Épicas</option>
+                            </select>
+                            <select id="filterHistoria">
+                                <option value="">Todas las Historias de Usuario</option>
+                            </select>
+                            <button id="clearFiltersBtn" class="clear-filters-btn" title="Limpiar todos los filtros">
+                                <i class="fas fa-times-circle"></i> Limpiar Filtros
+                            </button>
                         </div>
-                        <button class="btn-export">
-                            <i class="fas fa-download"></i>
-                            Exportar
-                        </button>
                     </div>
                 </div>
                 <div class="table-container">
                     <table class="test-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Nombre de la Prueba</th>
-                                <th>Escenario</th>
-                                <th>Estado</th>
-                                <th>Fecha Ejecución</th>
-                                <th>Ejecutor</th>
+                                <th>Aplicación</th>
+                                <th>Vertical</th>
+                                <th>Épica</th>
+                                <th>Historia de Usuario</th>
+                                <th># Criterios de Aceptación</th>
+                                <th># Casos de Prueba Diseñados</th>
+                                <th># Casos de Prueba Revisados</th>
+                                <th># Casos de Prueba Aprobados</th>
+                                <th># Casos de Prueba Pendientes</th>
                             </tr>
                         </thead>
                         <tbody id="testTableBody">
@@ -571,5 +344,18 @@
     </div>
 
     <script src="script.js?v=20251103"></script>
+    <!-- Modal para seleccionar hoja/proyecto del Excel -->
+    <div id="sheetSelectorModal" class="sheet-selector-modal" style="display: none;">
+        <div class="sheet-selector-content">
+            <div class="sheet-selector-header">
+                <h2><i class="fas fa-folder-open"></i> Seleccionar Building Block</h2>
+            </div>
+            <div class="sheet-selector-body" id="sheetSelectorBody">
+                <!-- Lista de hojas se generar� din�micamente -->
+            </div>
+        </div>
+    </div>
+
+    <script src="sheet-selector.js"></script>
 </body>
 </html>
