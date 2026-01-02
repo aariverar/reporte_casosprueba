@@ -250,37 +250,20 @@ function updateProgressTable(data) {
     // Guardar los datos globalmente para filtrado
     window.currentTableData = data;
     
-    tbody.innerHTML = '';
+    // Inicializar filteredTableData con todos los datos
+    filteredTableData = [...data];
     
-    data.forEach((row, index) => {
-        const tr = document.createElement('tr');
-        
-        // Obtener los valores directamente del Excel
-        const cpDiseñados = parseInt(row['cp_diseñado_qa']) || 0;
-        const cpAprobadoDev = parseInt(row['cp_aprobado_dev']) || 0;
-        const cpAprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
-        const cpPendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
-        const cpPendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
-        
-        tr.innerHTML = `
-            <td>${row['app'] || '-'}</td>
-            <td>${row['vertical'] || '-'}</td>
-            <td>${row['epica'] || '-'}</td>
-            <td>${row['hu'] || '-'}</td>
-            <td>${cpDiseñados}</td>
-            <td>${cpAprobadoDev}</td>
-            <td>${cpAprobadoNeg}</td>
-            <td>${cpPendienteDev}</td>
-            <td>${cpPendienteNeg}</td>
-        `;
-        tbody.appendChild(tr);
-    });
+    // Resetear a la primera página
+    currentTablePage = 1;
     
     // Actualizar todos los filtros
     updateAllFilters(data);
     
     // Configurar eventos de filtrado
     setupTableFilters();
+    
+    // Renderizar con paginación (respetará el itemsPerTablePage que por defecto es 5)
+    renderTableWithPagination();
 }
 
 // Actualizar todos los filtros dinámicamente (solo al cargar datos iniciales)
