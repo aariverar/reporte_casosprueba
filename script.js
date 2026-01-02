@@ -179,16 +179,16 @@ function resetToDefaultState() {
 
 //  Inicializar la aplicación
 document.addEventListener('DOMContentLoaded', function() {
-    // Registrar Service Worker para control de caché
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=20251103')
-            .then(function(registration) {
-                console.log('✅ Service Worker registrado:', registration);
-            })
-            .catch(function(error) {
-                console.log('❌ Error registrando Service Worker:', error);
-            });
-    }
+    // Service Worker deshabilitado temporalmente para evitar problemas de caché
+    // if ('serviceWorker' in navigator) {
+    //     navigator.serviceWorker.register('./sw.js?v=20251103')
+    //         .then(function(registration) {
+    //             console.log('✅ Service Worker registrado:', registration);
+    //         })
+    //         .catch(function(error) {
+    //             console.log('❌ Error registrando Service Worker:', error);
+    //         });
+    // }
     
     // Fuerza limpieza agresiva del caché al cargar la página
     forcePageRefresh();
@@ -407,17 +407,51 @@ function initializeDashboard() {
         month: 'long',
         day: 'numeric'
     });
-    document.getElementById('currentDate').textContent = currentDate;
+    const currentDateElement = document.getElementById('currentDate');
+    if (currentDateElement) {
+        currentDateElement.textContent = currentDate;
+    }
 
-    // Actualizar información del proyecto
-    document.getElementById('projectName').textContent = `Proyecto: ${testData.projectInfo.name}`;
-    document.getElementById('projectNameDetail').textContent = testData.projectInfo.name;
-    document.getElementById('qaResponsible').textContent = testData.projectInfo.qaResponsible;
-    document.getElementById('projectStartDate').textContent = testData.projectInfo.startDate;
-    document.getElementById('projectEndDate').textContent = testData.projectInfo.endDate;
-    document.getElementById('projectStatusDetail').textContent = testData.projectInfo.status;
-    document.getElementById('reportStartDate').textContent = testData.projectInfo.startDate;
-    document.getElementById('reportEndDate').textContent = testData.projectInfo.endDate;
+    // Actualizar información del proyecto solo si los elementos existen
+    const projectName = document.getElementById('projectName');
+    if (projectName) {
+        projectName.textContent = `Proyecto: ${testData.projectInfo.name}`;
+    }
+    
+    const projectNameDetail = document.getElementById('projectNameDetail');
+    if (projectNameDetail) {
+        projectNameDetail.textContent = testData.projectInfo.name;
+    }
+    
+    const qaResponsible = document.getElementById('qaResponsible');
+    if (qaResponsible) {
+        qaResponsible.textContent = testData.projectInfo.qaResponsible;
+    }
+    
+    const projectStartDate = document.getElementById('projectStartDate');
+    if (projectStartDate) {
+        projectStartDate.textContent = testData.projectInfo.startDate;
+    }
+    
+    const projectEndDate = document.getElementById('projectEndDate');
+    if (projectEndDate) {
+        projectEndDate.textContent = testData.projectInfo.endDate;
+    }
+    
+    const projectStatusDetail = document.getElementById('projectStatusDetail');
+    if (projectStatusDetail) {
+        projectStatusDetail.textContent = testData.projectInfo.status;
+    }
+    
+    const reportStartDate = document.getElementById('reportStartDate');
+    if (reportStartDate) {
+        reportStartDate.textContent = testData.projectInfo.startDate;
+    }
+    
+    const reportEndDate = document.getElementById('reportEndDate');
+    if (reportEndDate) {
+        reportEndDate.textContent = testData.projectInfo.endDate;
+    }
     
     // Actualizar progreso del proyecto con barras duales
     const realProgress = calculateProjectProgress();
@@ -455,23 +489,25 @@ function initializeDashboard() {
     
     // Actualizar estado del reporte
     const reportStatus = document.getElementById('reportStatus');
-    reportStatus.textContent = testData.projectInfo.status;
-    
-    // Aplicar estilos según el estado
-    switch(testData.projectInfo.status) {
-        case 'Finalizado':
-            reportStatus.style.background = 'rgba(16, 185, 129, 0.2)';
-            reportStatus.style.color = '#10b981';
-            break;
-        case 'Pruebas QA':
-            reportStatus.style.background = 'rgba(59, 130, 246, 0.2)';
-            reportStatus.style.color = '#3b82f6';
-            break;
-        case 'En Progreso':
-        default:
-            reportStatus.style.background = 'rgba(245, 158, 11, 0.2)';
-            reportStatus.style.color = '#f59e0b';
-            break;
+    if (reportStatus) {
+        reportStatus.textContent = testData.projectInfo.status;
+        
+        // Aplicar estilos según el estado
+        switch(testData.projectInfo.status) {
+            case 'Finalizado':
+                reportStatus.style.background = 'rgba(16, 185, 129, 0.2)';
+                reportStatus.style.color = '#10b981';
+                break;
+            case 'Pruebas QA':
+                reportStatus.style.background = 'rgba(59, 130, 246, 0.2)';
+                reportStatus.style.color = '#3b82f6';
+                break;
+            case 'En Progreso':
+            default:
+                reportStatus.style.background = 'rgba(245, 158, 11, 0.2)';
+                reportStatus.style.color = '#f59e0b';
+                break;
+        }
     }
 
     // Calcular el total de pruebas (todos los estados)
@@ -480,18 +516,39 @@ function initializeDashboard() {
     const totalTests = testData.summary.planned + testData.summary.successful + 
                       testData.summary.failed + testData.summary.pending + blockedCount + dismissedCount;
     
-    // Actualizar KPIs con la nueva lógica
-    document.getElementById('plannedTests').textContent = testData.summary.planned;
-    document.getElementById('successfulTests').textContent = testData.summary.successful;
-    document.getElementById('failedTests').textContent = testData.summary.failed;
-    document.getElementById('pendingTests').textContent = testData.summary.pending;
-    console.log(`🔍 DEBUGGING DOM - VALOR FINAL MOSTRADO EN PENDIENTES: ${testData.summary.pending}`);
+    // Actualizar KPIs con la nueva lógica solo si los elementos existen
+    const plannedTests = document.getElementById('plannedTests');
+    if (plannedTests) {
+        plannedTests.textContent = testData.summary.planned;
+    }
+    
+    const successfulTests = document.getElementById('successfulTests');
+    if (successfulTests) {
+        successfulTests.textContent = testData.summary.successful;
+    }
+    
+    const failedTests = document.getElementById('failedTests');
+    if (failedTests) {
+        failedTests.textContent = testData.summary.failed;
+    }
+    
+    const pendingTests = document.getElementById('pendingTests');
+    if (pendingTests) {
+        pendingTests.textContent = testData.summary.pending;
+        console.log(`🔍 DEBUGGING DOM - VALOR FINAL MOSTRADO EN PENDIENTES: ${testData.summary.pending}`);
+    }
     
     // Actualizar pruebas bloqueadas
-    document.getElementById('blockedTests').textContent = blockedCount;
+    const blockedTests = document.getElementById('blockedTests');
+    if (blockedTests) {
+        blockedTests.textContent = blockedCount;
+    }
     
     // Actualizar pruebas desestimadas
-    document.getElementById('dismissedTests').textContent = dismissedCount;
+    const dismissedTests = document.getElementById('dismissedTests');
+    if (dismissedTests) {
+        dismissedTests.textContent = dismissedCount;
+    }
     
     console.log('🎯 ACTUALIZANDO ELEMENTOS DOM:');
     console.log(`   • Planificadas: ${testData.summary.planned}`);
@@ -697,15 +754,34 @@ function hideAllPercentages() {
 
 // Crear todas las gráficas
 function createCharts() {
-    createPieChart();
-    createTrendChart();
-    createCategoryChart();
-    createDefectsChart();
-    updateDefectCycleTimeChart(testData.defects);
-    updateCoverageChart(testData.testDetails);
-    updateDailyExecutionChart(testData.testDetails);
-    updateExecutorDistributionChart(testData.testDetails);
-    updateDeliverablesChart();
+    // Solo crear gráficos si los elementos existen en el DOM
+    if (document.getElementById('pieChart')) {
+        createPieChart();
+    }
+    if (document.getElementById('trendChart')) {
+        createTrendChart();
+    }
+    if (document.getElementById('categoryChart')) {
+        createCategoryChart();
+    }
+    if (document.getElementById('defectsChart')) {
+        createDefectsChart();
+    }
+    if (document.getElementById('defectCycleTimeChart')) {
+        updateDefectCycleTimeChart(testData.defects);
+    }
+    if (document.getElementById('coverageChart')) {
+        updateCoverageChart(testData.testDetails);
+    }
+    if (document.getElementById('dailyExecutionChart')) {
+        updateDailyExecutionChart(testData.testDetails);
+    }
+    if (document.getElementById('executorDistributionChart')) {
+        updateExecutorDistributionChart(testData.testDetails);
+    }
+    if (document.getElementById('deliverablesChart')) {
+        updateDeliverablesChart();
+    }
 }
 
 // Gráfica de pastel - Resumen de resultados
@@ -2775,7 +2851,9 @@ function setupEventListeners() {
 
     // Exportar datos
     const exportButton = document.querySelector('.btn-export');
-    exportButton.addEventListener('click', exportData);
+    if (exportButton) {
+        exportButton.addEventListener('click', exportData);
+    }
 
     // Event listeners para paginación
     const prevPageBtn = document.getElementById('prevPageBtn');
@@ -3062,7 +3140,9 @@ window.addEventListener('resize', function() {
 // Configurar carga de archivos
 function setupFileUpload() {
     const fileInput = document.getElementById('excelFile');
-    fileInput.addEventListener('change', handleFileUpload);
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileUpload);
+    }
 }
 
 // Manejar carga de archivos

@@ -7,27 +7,28 @@ let currentTablePage = 1;
 let itemsPerTablePage = 5;
 let filteredTableData = [];
 
-// Verificar que XLSX esté cargado
-if (typeof XLSX === 'undefined') {
-    console.error('La librería XLSX no se ha cargado correctamente. Reintentando...');
-    // Intentar cargar XLSX nuevamente si no está disponible
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-    script.onload = function() {
-        console.log('XLSX cargado exitosamente');
-    };
-    script.onerror = function() {
-        console.error('Error al cargar la librería XLSX');
-        alert('Error: No se pudo cargar la librería necesaria para procesar archivos Excel. Por favor, recarga la página.');
-    };
-    document.head.appendChild(script);
+// Función para esperar a que XLSX esté disponible
+function waitForXLSX(callback) {
+    if (typeof XLSX !== 'undefined') {
+        console.log('✅ XLSX está disponible');
+        callback();
+    } else {
+        console.log('⏳ Esperando a que XLSX se cargue...');
+        setTimeout(() => waitForXLSX(callback), 100);
+    }
 }
+
+// Verificar que XLSX esté cargado al iniciar
+waitForXLSX(() => {
+    console.log('✅ XLSX cargado correctamente, versión:', XLSX.version);
+});
 
 // Modificar el manejador del archivo Excel
 function handleExcelFileWithSheets(file) {
     // Verificar que XLSX esté disponible antes de procesar
     if (typeof XLSX === 'undefined') {
         showNotification('Error: La librería XLSX no está cargada. Por favor, recarga la página.', 'error');
+        console.error('[ERROR] XLSX no está disponible');
         return;
     }
     
