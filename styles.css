@@ -851,7 +851,7 @@ body::before {
 /* KPI Cards */
 .kpi-section {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 0.875rem;
 }
 
@@ -1421,6 +1421,8 @@ body::before {
     font-weight: 600;
     font-size: 0.875rem;
     color: var(--text-secondary);
+    line-height: 1.3;
+    vertical-align: middle;
 }
 
 .test-table td {
@@ -2626,6 +2628,22 @@ body::before {
 .pdf-mode h6 {
     color: #333 !important;
     font-weight: bold !important;
+}
+
+/* Mejorar visibilidad de porcentajes en círculos para PDF */
+.pdf-mode .percentage-value,
+.pdf-mode .progress-value-small {
+    color: #000000 !important;
+    font-weight: 900 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+/* Asegurar que los círculos de progreso tengan bordes visibles */
+.pdf-mode .percentage-circle,
+.pdf-mode .progress-circle-small {
+    border-width: 6px !important;
+    opacity: 1 !important;
 }
 
 .pdf-mode .chart-header h3 {

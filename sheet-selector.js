@@ -138,15 +138,16 @@ function processSheetData(data, sheetName) {
     // vertical - Vertical
     // epica - Épica
     // hu - Historia de Usuario
-    // ca - # Criterios de Aceptación
     // cp_planificado - Casos de Prueba Planificados
-    // cp_diseñado_qa - Casos de Prueba Diseñados por QA
-    // cp_revisado_lt - Casos de Prueba Revisados por LT
-    // cp_aprobado_po - Casos de Prueba Aprobados por PO
-    // cp_pendiente_revision - Casos de Prueba Pendientes de Revisión
+    // cp_diseñado_qa - Casos de Prueba Diseñados por QA (Equipo QA)
+    // cp_aprobado_dev - Casos de Prueba Aprobados por Desarrollo (Equipo Desarrollo)
+    // cp_aprobado_neg - Casos de Prueba Aprobados por Negocio (Equipo Negocio)
+    // cp_pendiente_dev - Casos de Prueba Pendientes Desarrollo (Equipo Desarrollo)
+    // cp_pendiente_neg - Casos de Prueba Pendientes Negocio (Equipo Negocio)
     
     // Calcular totales para las tarjetas KPI
     let totalAplicaciones = new Set();
+    let totalVerticales = new Set();
     let totalEpicas = new Set();
     let totalHistorias = 0;
     let totalCriterios = 0;
@@ -161,6 +162,11 @@ function processSheetData(data, sheetName) {
             totalAplicaciones.add(row['app'].toString().trim());
         }
         
+        // Contar verticales únicas (solo si tiene valor no vacío)
+        if (row['vertical'] && row['vertical'].toString().trim() !== '') {
+            totalVerticales.add(row['vertical'].toString().trim());
+        }
+        
         // Contar épicas únicas (solo si tiene valor no vacío)
         if (row['epica'] && row['epica'].toString().trim() !== '') {
             totalEpicas.add(row['epica'].toString().trim());
@@ -171,27 +177,21 @@ function processSheetData(data, sheetName) {
             totalHistorias++;
         }
         
-        // Sumar criterios de aceptación
-        if (row['ca']) totalCriterios += Number(row['ca']) || 0;
-        
         // Sumar casos de prueba diseñados
         if (row['cp_diseñado_qa']) totalDisenados += Number(row['cp_diseñado_qa']) || 0;
         
-        // Sumar casos de prueba revisados
-        if (row['cp_revisado_lt']) totalRevisados += Number(row['cp_revisado_lt']) || 0;
+        // Sumar casos de prueba aprobados por desarrollo
+        if (row['cp_aprobado_dev']) totalRevisados += Number(row['cp_aprobado_dev']) || 0;
         
-        // Sumar casos de prueba aprobados
-        if (row['cp_aprobado_po']) totalAprobados += Number(row['cp_aprobado_po']) || 0;
-        
-        // Sumar casos de prueba pendientes
-        if (row['cp_pendiente_revision']) totalPendientes += Number(row['cp_pendiente_revision']) || 0;
+        // Sumar casos de prueba aprobados por negocio
+        if (row['cp_aprobado_neg']) totalAprobados += Number(row['cp_aprobado_neg']) || 0;
     });
     
     // Actualizar las tarjetas KPI
     updateKPI('plannedTests', totalAplicaciones.size); // APLICACIONES
+    updateKPI('verticalTests', totalVerticales.size); // VERTICALES
     updateKPI('successfulTests', totalEpicas.size); // ÉPICAS
     updateKPI('failedTests', totalHistorias); // HISTORIAS DE USUARIO
-    updateKPI('pendingTests', totalCriterios); // CRITERIOS DE ACEPTACIÓN
     updateKPI('blockedTests', totalDisenados); // CASOS DE PRUEBA DISEÑADOS
     updateKPI('dismissedTests', totalAprobados); // CASOS DE PRUEBA APROBADOS
     
@@ -231,16 +231,24 @@ function updateProgressTable(data) {
     
     data.forEach((row, index) => {
         const tr = document.createElement('tr');
+        
+        // Obtener los valores directamente del Excel
+        const cpDiseñados = parseInt(row['cp_diseñado_qa']) || 0;
+        const cpAprobadoDev = parseInt(row['cp_aprobado_dev']) || 0;
+        const cpAprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
+        const cpPendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
+        const cpPendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
+        
         tr.innerHTML = `
             <td>${row['app'] || '-'}</td>
             <td>${row['vertical'] || '-'}</td>
             <td>${row['epica'] || '-'}</td>
             <td>${row['hu'] || '-'}</td>
-            <td>${row['ca'] || 0}</td>
-            <td>${row['cp_diseñado_qa'] || 0}</td>
-            <td>${row['cp_revisado_lt'] || 0}</td>
-            <td>${row['cp_aprobado_po'] || 0}</td>
-            <td>${row['cp_pendiente_revision'] || 0}</td>
+            <td>${cpDiseñados}</td>
+            <td>${cpAprobadoDev}</td>
+            <td>${cpAprobadoNeg}</td>
+            <td>${cpPendienteDev}</td>
+            <td>${cpPendienteNeg}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -570,16 +578,24 @@ function renderTableWithPagination() {
     
     pageData.forEach(row => {
         const tr = document.createElement('tr');
+        
+        // Obtener los valores directamente del Excel
+        const cpDiseñados = parseInt(row['cp_diseñado_qa']) || 0;
+        const cpAprobadoDev = parseInt(row['cp_aprobado_dev']) || 0;
+        const cpAprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
+        const cpPendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
+        const cpPendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
+        
         tr.innerHTML = `
             <td>${row['app'] || '-'}</td>
             <td>${row['vertical'] || '-'}</td>
             <td>${row['epica'] || '-'}</td>
             <td>${row['hu'] || '-'}</td>
-            <td>${row['ca'] || 0}</td>
-            <td>${row['cp_diseñado_qa'] || 0}</td>
-            <td>${row['cp_revisado_lt'] || 0}</td>
-            <td>${row['cp_aprobado_po'] || 0}</td>
-            <td>${row['cp_pendiente_revision'] || 0}</td>
+            <td>${cpDiseñados}</td>
+            <td>${cpAprobadoDev}</td>
+            <td>${cpAprobadoNeg}</td>
+            <td>${cpPendienteDev}</td>
+            <td>${cpPendienteNeg}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -722,52 +738,51 @@ function updateDynamicMetrics(data) {
             historiasUnicas.add(row['hu']);
         }
         
-        // Sumar criterios de aceptación
-        const ca = parseInt(row['ca']) || 0;
-        totalCriterios += ca;
-        
         // Sumar casos de prueba
         const planificado = parseInt(row['cp_planificado']) || 0;
         const diseñados = parseInt(row['cp_diseñado_qa']) || 0;
-        const revisados = parseInt(row['cp_revisado_lt']) || 0;
-        const aprobados = parseInt(row['cp_aprobado_po']) || 0;
-        const pendientes = parseInt(row['cp_pendiente_revision']) || 0;
+        const aprobadoDev = parseInt(row['cp_aprobado_dev']) || 0;
+        const aprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
+        const pendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
+        const pendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
         
         totalPlanificado += planificado;
         totalDiseñados += diseñados;
-        totalRevisados += revisados;
-        totalAprobados += aprobados;
-        totalPendientes += pendientes;
+        totalRevisados += aprobadoDev;  // Ahora es aprobados por desarrollo
+        totalAprobados += aprobadoNeg;  // Ahora es aprobados por negocio
+        totalPendientes += pendienteNeg;  // Pendientes de negocio
     });
     
     // Calcular porcentajes
     const porcentajeAvance = totalDiseñados > 0 ? Math.round((totalAprobados / totalDiseñados) * 100) : 0;
     
-    // Calcular porcentajes individuales según la nueva lógica
+    // Calcular porcentajes individuales según las nuevas columnas del Excel
     
-    // % Avance Diseño CP: cp_planificado es el 100% y cp_diseñado_qa su avance
+    // % Avance Diseño CP (Equipo QA): cp_planificado es el 100% y cp_diseñado_qa su avance
     const porcentajeDiseño = totalPlanificado > 0 ? Math.round((totalDiseñados / totalPlanificado) * 100) : 0;
     
-    // % Avance Revisiones CP: cp_diseñado_qa es el 100% y cp_revisado_lt su avance
+    // % Avance Aprobaciones CP (Equipo Desarrollo): cp_diseñado_qa es el 100% y cp_aprobado_dev su avance
     const porcentajeRevisiones = totalDiseñados > 0 ? Math.round((totalRevisados / totalDiseñados) * 100) : 0;
     
-    // % Avance Aprobaciones CP: cp_diseñado_qa es el 100% y cp_aprobado_po su avance
+    // % Avance Aprobaciones CP (Equipo Negocio): cp_diseñado_qa es el 100% y cp_aprobado_neg su avance
     const porcentajeAprobaciones = totalDiseñados > 0 ? Math.round((totalAprobados / totalDiseñados) * 100) : 0;
     
-    // % Pendientes por Revisar: cp_diseñado_qa es el 100% y (cp_diseñado_qa - cp_revisado_lt) son los pendientes
-    const cpPendientesRevision = totalDiseñados - totalRevisados;
-    const porcentajePendientes = totalDiseñados > 0 ? Math.round((cpPendientesRevision / totalDiseñados) * 100) : 0;
+    // % Pendiente Aprobación (Equipo Desarrollo): usar cp_pendiente_dev directamente del Excel
+    // Calculamos el porcentaje: (suma de cp_pendiente_dev / suma de cp_diseñado_qa) * 100
+    let totalPendientesDev = 0;
+    data.forEach(row => {
+        totalPendientesDev += parseInt(row['cp_pendiente_dev']) || 0;
+    });
+    const porcentajePendientes = totalDiseñados > 0 ? Math.round((totalPendientesDev / totalDiseñados) * 100) : 0;
     
-    // % Pendiente Aprobación (Equipo de Negocio): cp_diseñado_qa es el 100% y (cp_diseñado_qa - cp_aprobado_po) son los pendientes de aprobar
-    const cpPendientesAprobacion = totalDiseñados - totalAprobados;
-    const porcentajePendientesAprobacion = totalDiseñados > 0 ? Math.round((cpPendientesAprobacion / totalDiseñados) * 100) : 0;
+    // % Pendiente Aprobación (Equipo de Negocio): usar cp_pendiente_neg directamente del Excel
+    const porcentajePendientesAprobacion = totalDiseñados > 0 ? Math.round((totalPendientes / totalDiseñados) * 100) : 0;
     
     // Actualizar tarjetas KPI (los nombres deben coincidir con los <h3> del HTML)
     updateKPICard('APLICACIONES', aplicacionesUnicas.size);
     updateKPICard('VERTICALES', verticalesUnicas.size);
     updateKPICard('EPICAS', epicasUnicas.size);
     updateKPICard('HISTORIAS DE USUARIO', historiasUnicas.size);
-    updateKPICard('CRITERIOS DE ACEPTACION', totalCriterios);
     updateKPICard('CASOS DE PRUEBA DISEÑADOS', totalDiseñados);
     updateKPICard('CASOS DE PRUEBA APROBADOS', totalAprobados);
     
