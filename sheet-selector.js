@@ -688,6 +688,7 @@ function changeTableItemsPerPage(newItemsPerPage) {
 function updateDynamicMetrics(data) {
     // Contadores usando Set para valores únicos
     const aplicacionesUnicas = new Set();
+    const verticalesUnicas = new Set();
     const epicasUnicas = new Set();
     const historiasUnicas = new Set();
     
@@ -704,6 +705,11 @@ function updateDynamicMetrics(data) {
         // Contar aplicaciones únicas
         if (row['app'] && row['app'].toString().trim() !== '') {
             aplicacionesUnicas.add(row['app']);
+        }
+        
+        // Contar verticales únicas
+        if (row['vertical'] && row['vertical'].toString().trim() !== '') {
+            verticalesUnicas.add(row['vertical']);
         }
         
         // Contar épicas únicas
@@ -758,6 +764,7 @@ function updateDynamicMetrics(data) {
     
     // Actualizar tarjetas KPI (los nombres deben coincidir con los <h3> del HTML)
     updateKPICard('APLICACIONES', aplicacionesUnicas.size);
+    updateKPICard('VERTICALES', verticalesUnicas.size);
     updateKPICard('EPICAS', epicasUnicas.size);
     updateKPICard('HISTORIAS DE USUARIO', historiasUnicas.size);
     updateKPICard('CRITERIOS DE ACEPTACION', totalCriterios);
