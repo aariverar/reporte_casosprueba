@@ -87,33 +87,7 @@ const testData = {
             { id: 'DEF010', title: 'Problema con scroll en móviles', severity: 'low', status: 'ReOpened', escenario: 'UI Tests', assignee: 'Pedro Ruiz', dateFound: '25/09/2024' }
         ]
     },
-    testDetails: [
-        { id: 'T001', name: 'Login API Validation', escenario: 'API Tests', status: 'success', dia_ejecutado: '08/10/2024', executor: 'Ana García' },
-        { id: 'T002', name: 'User Registration Flow', escenario: 'UI Tests', status: 'success', dia_ejecutado: '08/10/2024', executor: 'Carlos López' },
-        { id: 'T003', name: 'Payment Processing', escenario: 'Integration', status: 'failure', dia_ejecutado: '07/10/2024', executor: 'María Rodríguez' },
-        { id: 'T004', name: 'Database Connection', escenario: 'Integration', status: 'success', dia_ejecutado: '08/10/2024', executor: 'José Martín' },
-        { id: 'T005', name: 'Load Testing', escenario: 'Performance', status: 'pending', dia_ejecutado: '', executor: 'Laura Sánchez' },
-        { id: 'T006', name: 'Search Functionality', escenario: 'UI Tests', status: 'failure', dia_ejecutado: '06/10/2024', executor: 'Pedro Ruiz' },
-        { id: 'T007', name: 'Email Notifications', escenario: 'API Tests', status: 'success', dia_ejecutado: '08/10/2024', executor: 'Ana García' },
-        { id: 'T008', name: 'Security Headers', escenario: 'Security', status: 'success', dia_ejecutado: '09/10/2024', executor: 'Carlos López' },
-        { id: 'T009', name: 'Password Reset Flow', escenario: 'UI Tests', status: 'pending', dia_ejecutado: '', executor: 'Ana García' },
-        { id: 'T010', name: 'API Rate Limiting', escenario: 'API Tests', status: 'blocked', dia_ejecutado: '', executor: 'José Martín' },
-        { id: 'T011', name: 'Mobile Responsive Design', escenario: 'UI Tests', status: 'failure', dia_ejecutado: '05/10/2024', executor: 'Pedro Ruiz' },
-        { id: 'T012', name: 'Database Backup Process', escenario: 'Integration', status: 'success', dia_ejecutado: '07/10/2024', executor: 'María Rodríguez' },
-        { id: 'T013', name: 'Stress Testing CPU', escenario: 'Performance', status: 'success', dia_ejecutado: '04/10/2024', executor: 'Laura Sánchez' },
-        { id: 'T014', name: 'HTTPS Certificate Validation', escenario: 'Security', status: 'success', dia_ejecutado: '09/10/2024', executor: 'Carlos López' },
-        { id: 'T015', name: 'Shopping Cart Functionality', escenario: 'UI Tests', status: 'pending', dia_ejecutado: '', executor: 'Pedro Ruiz' },
-        { id: 'T016', name: 'OAuth2 Authentication', escenario: 'API Tests', status: 'failure', dia_ejecutado: '03/10/2024', executor: 'Ana García' },
-        { id: 'T017', name: 'Cross-browser Compatibility', escenario: 'UI Tests', status: 'planned', dia_ejecutado: '', executor: 'Ana García' },
-        { id: 'T018', name: 'Memory Leak Testing', escenario: 'Performance', status: 'planned', dia_ejecutado: '', executor: 'Laura Sánchez' },
-        { id: 'T019', name: 'SQL Injection Prevention', escenario: 'Security', status: 'blocked', dia_ejecutado: '', executor: 'Carlos López' },
-        { id: 'T020', name: 'File Upload Validation', escenario: 'API Tests', status: 'planned', dia_ejecutado: '', executor: 'José Martín' },
-        { id: 'T021', name: 'Legacy Browser Support', escenario: 'UI Tests', status: 'dismissed', dia_ejecutado: '', executor: 'Ana García' },
-        { id: 'T022', name: 'Obsolete API Endpoints', escenario: 'API Tests', status: 'dismissed', dia_ejecutado: '', executor: 'Carlos López' },
-        { id: 'T023', name: 'Deprecated Features Test', escenario: 'Integration', status: 'dismissed', dia_ejecutado: '', executor: 'María Rodríguez' },
-        { id: 'T024', name: 'Old Version Compatibility', escenario: 'Performance', status: 'dismissed', dia_ejecutado: '', executor: 'Laura Sánchez' },
-        { id: 'T025', name: 'Unused Security Protocols', escenario: 'Security', status: 'dismissed', dia_ejecutado: '', executor: 'José Martín' }
-    ]
+    testDetails: []  // Tabla vacía por defecto - se llenará con datos del Excel
 };
 
 // Función para forzar actualización anti-caché
