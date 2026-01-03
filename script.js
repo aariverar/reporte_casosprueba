@@ -5574,7 +5574,7 @@ async function addPDFHeader(pdf, startY) {
     // Subtítulo
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text('Reporte de Ejecución Diaria de Pruebas', 15, 22);
+    pdf.text('Reporte de Avance de Diseño de Casos de Prueba', 15, 22);
     
     // Fecha de generación
     const currentDate = new Date().toLocaleDateString('es-ES', {
