@@ -172,13 +172,6 @@ function updateKPI(elementId, value) {
 }
 
 // Actualizar porcentaje de progreso general
-function updateProgressPercentage(percentage) {
-    const element = document.getElementById('generalProgressPercentage');
-    if (element) {
-        element.textContent = percentage + '%';
-    }
-}
-
 // Actualizar tabla de progreso
 function updateProgressTable(data) {
     const tbody = document.getElementById('testTableBody');
@@ -763,42 +756,34 @@ function updateKPICard(title, value) {
     });
 }
 
-// Actualizar porcentaje de avance general con SVG animado
+// Actualizar porcentaje de avance general con velocímetro animado
 function updateProgressPercentage(percentage) {
     const percentageElement = document.getElementById('generalProgressPercentage');
     if (percentageElement) {
         // Actualizar texto del porcentaje
         percentageElement.textContent = `${percentage}%`;
         
-        // Obtener el círculo SVG
-        const circleContainer = document.getElementById('generalProgressCircle');
+        // Actualizar velocímetro
+        const progressPath = document.getElementById('speedometerProgress');
+        const needle = document.getElementById('speedometerNeedle');
         
-        if (circleContainer) {
-            const svgCircle = circleContainer.querySelector('svg circle:last-child');
+        if (progressPath && needle) {
+            const circumference = 314; // Longitud del arco (π * radio * π)
+            const offset = circumference - (percentage / 100) * circumference;
             
-            if (svgCircle) {
-                // Calcular el dashoffset basado en el porcentaje
-                const radius = parseFloat(svgCircle.getAttribute('r'));
-                const circumference = 2 * Math.PI * radius;
-                
-                // Inicializar strokeDasharray si no está configurado
-                if (!svgCircle.style.strokeDasharray) {
-                    svgCircle.style.strokeDasharray = circumference;
-                    svgCircle.style.strokeDashoffset = circumference;
-                }
-                
-                const offset = circumference - (percentage / 100) * circumference;
-                
-                // Aplicar animación después de un pequeño delay para que se vea el efecto
-                setTimeout(() => {
-                    svgCircle.style.strokeDashoffset = offset;
-                }, 50);
-                
-                // Aplicar color basado en porcentaje
-                const color = getColorByPercentage(percentage);
-                svgCircle.style.stroke = color;
-                percentageElement.style.color = color;
-            }
+            // Animar el arco de progreso
+            setTimeout(() => {
+                progressPath.style.strokeDashoffset = offset;
+                progressPath.style.stroke = getColorByPercentage(percentage);
+            }, 50);
+            
+            // Animar la aguja (de -90° a 90° = 180° total)
+            const angle = -90 + (percentage / 100) * 180;
+            needle.style.transform = `rotate(${angle}deg)`;
+            
+            // Actualizar color del porcentaje
+            const color = getColorByPercentage(percentage);
+            percentageElement.style.color = color;
         }
     }
 }

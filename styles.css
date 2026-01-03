@@ -383,6 +383,67 @@ body::before {
     margin: 0;
 }
 
+/* Speedometer Styles */
+.speedometer {
+    width: 300px;
+    height: 210px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.speedometer svg {
+    display: block;
+}
+
+#speedometerProgress {
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0.0, 0.2, 1), 
+                stroke 0.5s ease;
+}
+
+#speedometerNeedle {
+    transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-origin: 140px 160px;
+}
+
+.speedometer-value {
+    position: absolute;
+    top: 105px;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    z-index: 10;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.speedometer-label-modern {
+    cursor: default;
+    transition: all 0.3s ease;
+}
+
+.speedometer-label-modern:hover rect {
+    transform: scale(1.15);
+    transform-origin: center;
+    opacity: 1 !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.speedometer-label-modern:hover text {
+    font-size: 12px;
+}
+
+.speedometer-label-modern rect {
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.speedometer-label-modern text {
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
 /* Individual Progress Section */
 .individual-progress-section {
     margin-bottom: 2rem;
@@ -473,6 +534,21 @@ body::before {
         width: 120px;
         height: 120px;
         border-width: 5px;
+    }
+    
+    .speedometer {
+        width: 220px;
+        height: 160px;
+    }
+    
+    .speedometer svg {
+        width: 220px;
+        height: 140px;
+    }
+    
+    .speedometer-value {
+        font-size: 2.2rem;
+        top: 85px;
     }
     
     .percentage-value {
