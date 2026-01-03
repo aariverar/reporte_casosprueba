@@ -146,6 +146,13 @@ body::before {
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+.santander-logo {
+    height: 32px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    object-fit: contain;
+}
+
 .logo h1 {
     font-size: 1rem;
     font-weight: 600;
@@ -252,12 +259,12 @@ body::before {
 /* Project Header */
 .project-header-modern {
     background: linear-gradient(135deg, rgba(236, 0, 0, 0.05), rgba(236, 0, 0, 0.02));
-    padding: 1rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-bottom: 2px solid rgba(236, 0, 0, 0.1);
 }
 
 .project-header-modern h3 {
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     font-weight: 700;
     color: var(--text-primary);
     display: flex;
@@ -268,7 +275,7 @@ body::before {
 
 .project-header-modern h3 i {
     color: var(--primary-color);
-    font-size: 1.25rem;
+    font-size: 1rem;
 }
 
 /* Project Title Section */
@@ -755,11 +762,11 @@ body::before {
     }
     
     .project-header-modern {
-        padding: 1.25rem 1.5rem;
+        padding: 0.6rem 1rem;
     }
     
     .project-header-modern h3 {
-        font-size: 1.25rem;
+        font-size: 0.95rem;
     }
     
     .info-card {
@@ -838,7 +845,7 @@ body::before {
     padding: 1rem 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.90rem;
 }
 
 /* KPI Cards */
@@ -938,7 +945,7 @@ body::before {
     color: var(--text-secondary);
     margin-bottom: 0.25rem;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .kpi-value {
@@ -1171,14 +1178,14 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .table-header h3 {
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -1404,7 +1411,7 @@ body::before {
 
 .test-table th,
 .test-table td {
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 0.75rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
@@ -1773,30 +1780,33 @@ body::before {
 }
 
 .clear-filters-btn {
-    padding: 0.5rem 1rem;
+    width: 36px;
+    height: 36px;
+    padding: 0;
     background: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 50%;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0;
     transition: all 0.3s ease;
     white-space: nowrap;
 }
 
 .clear-filters-btn:hover {
     background: var(--primary-dark);
-    box-shadow: 0 2px 8px rgba(236, 0, 0, 0.3);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(236, 0, 0, 0.4);
+    transform: translateY(-2px) scale(1.05);
 }
 
 .clear-filters-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(236, 0, 0, 0.2);
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 6px rgba(236, 0, 0, 0.3);
 }
 
 .clear-filters-btn i {
