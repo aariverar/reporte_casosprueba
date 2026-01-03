@@ -1970,7 +1970,7 @@ function populateTestTable() {
     if (!testData.testDetails || testData.testDetails.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="no-data-message">
+                <td colspan="9" class="no-data-message">
                     <div class="no-data-content">
                         <i class="fas fa-vial"></i>
                         <p>No hay pruebas registradas</p>
@@ -2009,7 +2009,7 @@ function populateTestTable() {
     if (totalItems === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="6" class="no-results-message">
+                <td colspan="9" class="no-results-message">
                     <div class="no-results-content">
                         <i class="fas fa-search"></i>
                         <p>No se encontraron pruebas que coincidan con los filtros</p>
