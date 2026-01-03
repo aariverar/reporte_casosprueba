@@ -76,7 +76,11 @@
                     </div>
                     <div class="project-title-section">
                         <div class="percentage-card-centered">
-                            <div class="percentage-circle">
+                            <div class="percentage-circle" id="generalProgressCircle">
+                                <svg width="140" height="140">
+                                    <circle cx="70" cy="70" r="60"></circle>
+                                    <circle cx="70" cy="70" r="60"></circle>
+                                </svg>
                                 <span class="percentage-value" id="generalProgressPercentage">0%</span>
                             </div>
                             <p class="percentage-label">% CASOS DE PRUEBA APROBADOS</p>
@@ -174,35 +178,55 @@
                     </div>
                     <div class="individual-progress-grid">
                         <div class="progress-indicator-card">
-                            <div class="progress-circle-small">
+                            <div class="progress-circle-small" id="designProgressCircle">
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                </svg>
                                 <span class="progress-value-small" id="designProgressPercentage">0%</span>
                             </div>
                             <p class="progress-label-small">% Avance Diseño CP<br>(Equipo QA)</p>
                         </div>
                         
                         <div class="progress-indicator-card">
-                            <div class="progress-circle-small">
+                            <div class="progress-circle-small" id="reviewProgressCircle">
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                </svg>
                                 <span class="progress-value-small" id="reviewProgressPercentage">0%</span>
                             </div>
                             <p class="progress-label-small">% Avance Aprobaciones CP (Equipo Desarrollo)</p>
                         </div>
                         
                         <div class="progress-indicator-card">
-                            <div class="progress-circle-small">
+                            <div class="progress-circle-small" id="approvalProgressCircle">
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                </svg>
                                 <span class="progress-value-small" id="approvalProgressPercentage">0%</span>
                             </div>
                             <p class="progress-label-small">% Avance Aprobaciones CP (Equipo Negocio)</p>
                         </div>
                         
                         <div class="progress-indicator-card">
-                            <div class="progress-circle-small">
+                            <div class="progress-circle-small" id="pendingProgressCircle">
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                </svg>
                                 <span class="progress-value-small" id="pendingProgressPercentage">0%</span>
                             </div>
                             <p class="progress-label-small">% Pendiente Aprobación<br>(Equipo Desarrollo)</p>
                         </div>
                         
                         <div class="progress-indicator-card">
-                            <div class="progress-circle-small">
+                            <div class="progress-circle-small" id="pendingApprovalProgressCircle">
+                                <svg width="100" height="100">
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                    <circle cx="50" cy="50" r="42"></circle>
+                                </svg>
                                 <span class="progress-value-small" id="pendingApprovalProgressPercentage">0%</span>
                             </div>
                             <p class="progress-label-small">% Pendiente Aprobación<br>(Equipo Negocio)</p>
@@ -299,7 +323,7 @@
                     © Santander Consumer Bank - Aseguramiento de Calidad
                 </div>
                 <div class="footer-credits">
-                    Powered by Equipo QA | Support: arivera_scb@santander.com.pe - 2025
+                    Powered by Equipo QA | Support: arivera_scb@santander.com.pe - 2026
                 </div>
             </div>
         </div>

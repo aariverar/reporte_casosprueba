@@ -763,28 +763,43 @@ function updateKPICard(title, value) {
     });
 }
 
-// Actualizar porcentaje de avance general
+// Actualizar porcentaje de avance general con SVG animado
 function updateProgressPercentage(percentage) {
-    const percentageElement = document.querySelector('.percentage-value');
+    const percentageElement = document.getElementById('generalProgressPercentage');
     if (percentageElement) {
-        // Animar el cambio
-        percentageElement.style.transition = 'transform 0.3s ease';
-        percentageElement.style.transform = 'scale(1.2)';
+        // Actualizar texto del porcentaje
         percentageElement.textContent = `${percentage}%`;
         
-        // Aplicar color basado en porcentaje
-        const color = getColorByPercentage(percentage);
-        const circle = percentageElement.closest('.percentage-circle');
-        if (circle) {
-            circle.style.borderColor = color;
-            circle.style.boxShadow = `0 8px 24px ${color}40, inset 0 2px 8px rgba(0, 0, 0, 0.05)`;
-        }
-        percentageElement.style.color = color;
-        percentageElement.style.textShadow = `0 2px 4px ${color}40`;
+        // Obtener el círculo SVG
+        const circleContainer = document.getElementById('generalProgressCircle');
         
-        setTimeout(() => {
-            percentageElement.style.transform = 'scale(1)';
-        }, 300);
+        if (circleContainer) {
+            const svgCircle = circleContainer.querySelector('svg circle:last-child');
+            
+            if (svgCircle) {
+                // Calcular el dashoffset basado en el porcentaje
+                const radius = parseFloat(svgCircle.getAttribute('r'));
+                const circumference = 2 * Math.PI * radius;
+                
+                // Inicializar strokeDasharray si no está configurado
+                if (!svgCircle.style.strokeDasharray) {
+                    svgCircle.style.strokeDasharray = circumference;
+                    svgCircle.style.strokeDashoffset = circumference;
+                }
+                
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                // Aplicar animación después de un pequeño delay para que se vea el efecto
+                setTimeout(() => {
+                    svgCircle.style.strokeDashoffset = offset;
+                }, 50);
+                
+                // Aplicar color basado en porcentaje
+                const color = getColorByPercentage(percentage);
+                svgCircle.style.stroke = color;
+                percentageElement.style.color = color;
+            }
+        }
     }
 }
 
@@ -821,41 +836,52 @@ function getColorByPercentage(percentage) {
     return `rgb(${color.r}, ${color.g}, ${color.b})`;
 }
 
-// Actualizar porcentajes individuales
+// Actualizar porcentajes individuales con SVG animado
 function updateIndividualProgress(elementId, percentage) {
     const progressElement = document.getElementById(elementId);
     if (progressElement) {
-        // Animar el cambio
-        progressElement.style.transition = 'transform 0.3s ease, color 0.5s ease';
-        progressElement.style.transform = 'scale(1.2)';
+        // Actualizar texto del porcentaje
         progressElement.textContent = `${percentage}%`;
         
-        // Aplicar color basado en porcentaje (excepto para pendientes)
-        if (elementId !== 'pendingProgressPercentage' && elementId !== 'pendingApprovalProgressPercentage') {
-            const color = getColorByPercentage(percentage);
-            const circle = progressElement.closest('.progress-circle-small');
-            if (circle) {
-                circle.style.setProperty('border-color', color, 'important');
-                circle.style.setProperty('box-shadow', `0 4px 12px ${color}30, inset 0 2px 4px rgba(0, 0, 0, 0.05)`, 'important');
-            }
-            progressElement.style.setProperty('color', color, 'important');
-            progressElement.style.setProperty('text-shadow', `0 2px 4px ${color}40`, 'important');
-        } else {
-            // Para pendientes (revisión y aprobación), invertir el color: 0% pendiente = verde (100), 100% pendiente = rojo (0)
-            const invertedPercent = 100 - percentage;
-            const color = getColorByPercentage(invertedPercent);
-            const circle = progressElement.closest('.progress-circle-small');
-            if (circle) {
-                circle.style.setProperty('border-color', color, 'important');
-                circle.style.setProperty('box-shadow', `0 4px 12px ${color}30, inset 0 2px 4px rgba(0, 0, 0, 0.05)`, 'important');
-            }
-            progressElement.style.setProperty('color', color, 'important');
-            progressElement.style.setProperty('text-shadow', `0 2px 4px ${color}40`, 'important');
-        }
+        // Obtener el círculo SVG
+        const circleId = elementId.replace('Percentage', 'Circle');
+        const circleContainer = document.getElementById(circleId);
         
-        setTimeout(() => {
-            progressElement.style.transform = 'scale(1)';
-        }, 300);
+        if (circleContainer) {
+            const svgCircle = circleContainer.querySelector('svg circle:last-child');
+            
+            if (svgCircle) {
+                // Calcular el dashoffset basado en el porcentaje
+                const radius = parseFloat(svgCircle.getAttribute('r'));
+                const circumference = 2 * Math.PI * radius;
+                
+                // Inicializar strokeDasharray si no está configurado
+                if (!svgCircle.style.strokeDasharray) {
+                    svgCircle.style.strokeDasharray = circumference;
+                    svgCircle.style.strokeDashoffset = circumference;
+                }
+                
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                // Aplicar animación después de un pequeño delay
+                setTimeout(() => {
+                    svgCircle.style.strokeDashoffset = offset;
+                }, 50);
+                
+                // Aplicar color basado en porcentaje
+                let color;
+                if (elementId !== 'pendingProgressPercentage' && elementId !== 'pendingApprovalProgressPercentage') {
+                    color = getColorByPercentage(percentage);
+                } else {
+                    // Para pendientes, invertir el color
+                    const invertedPercent = 100 - percentage;
+                    color = getColorByPercentage(invertedPercent);
+                }
+                
+                svgCircle.style.stroke = color;
+                progressElement.style.color = color;
+            }
+        }
     }
 }
 
