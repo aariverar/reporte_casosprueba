@@ -421,27 +421,6 @@ body::before {
 
 .speedometer-label-modern {
     cursor: default;
-    transition: all 0.3s ease;
-}
-
-.speedometer-label-modern:hover rect {
-    transform: scale(1.15);
-    transform-origin: center;
-    opacity: 1 !important;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-.speedometer-label-modern:hover text {
-    font-size: 12px;
-}
-
-.speedometer-label-modern rect {
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.speedometer-label-modern text {
-    transition: all 0.3s ease;
-    pointer-events: none;
 }
 
 /* Individual Progress Section */
