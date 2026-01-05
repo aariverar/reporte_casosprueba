@@ -529,8 +529,8 @@ function renderTableWithPagination() {
             <td>${row['hu'] || '-'}</td>
             <td>${cpDiseñados}</td>
             <td>${cpAprobadoDev}</td>
-            <td>${cpAprobadoNeg}</td>
             <td>${cpPendienteDev}</td>
+            <td>${cpAprobadoNeg}</td>
             <td>${cpPendienteNeg}</td>
         `;
         tbody.appendChild(tr);
@@ -740,17 +740,24 @@ function updateKPICard(title, value) {
     
     kpiCards.forEach(card => {
         const titleElement = card.querySelector('h3');
-        if (titleElement && titleElement.textContent.trim().toUpperCase() === title.toUpperCase()) {
-            const numberElement = card.querySelector('.kpi-value .number');
-            if (numberElement) {
-                // Animar el cambio de valor
-                numberElement.style.transition = 'transform 0.3s ease, color 0.3s ease';
-                numberElement.style.transform = 'scale(1.2)';
-                numberElement.textContent = value;
-                
-                setTimeout(() => {
-                    numberElement.style.transform = 'scale(1)';
-                }, 300);
+        if (titleElement) {
+            // Normalizar el texto eliminando saltos de línea y texto entre paréntesis
+            const normalizedTitle = titleElement.textContent.trim().toUpperCase().replace(/\s+/g, ' ');
+            const normalizedSearch = title.toUpperCase().trim();
+            
+            // Comprobar si el título comienza con el texto de búsqueda
+            if (normalizedTitle.startsWith(normalizedSearch) || normalizedTitle.includes(normalizedSearch)) {
+                const numberElement = card.querySelector('.kpi-value .number');
+                if (numberElement) {
+                    // Animar el cambio de valor
+                    numberElement.style.transition = 'transform 0.3s ease, color 0.3s ease';
+                    numberElement.style.transform = 'scale(1.2)';
+                    numberElement.textContent = value;
+                    
+                    setTimeout(() => {
+                        numberElement.style.transform = 'scale(1)';
+                    }, 300);
+                }
             }
         }
     });
