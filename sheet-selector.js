@@ -7,6 +7,68 @@ let currentTablePage = 1;
 let itemsPerTablePage = 5;
 let filteredTableData = [];
 
+// Función para limpiar completamente todos los datos al cargar un nuevo archivo
+function clearAllData() {
+    console.log('🧹 Limpiando todos los datos anteriores...');
+    
+    // Resetear variables globales
+    loadedWorkbook = null;
+    availableSheets = [];
+    filteredTableData = [];
+    currentTablePage = 1;
+    
+    // Limpiar la tabla
+    const tbody = document.getElementById('testTableBody');
+    if (tbody) {
+        tbody.innerHTML = '';
+    }
+    
+    // Resetear filtros
+    const filterAplicacion = document.getElementById('filterAplicacion');
+    const filterVertical = document.getElementById('filterVertical');
+    const filterEpica = document.getElementById('filterEpica');
+    const filterHistoria = document.getElementById('filterHistoria');
+    
+    if (filterAplicacion) filterAplicacion.innerHTML = '<option value="">Todas las Aplicaciones</option>';
+    if (filterVertical) filterVertical.innerHTML = '<option value="">Todos los Verticales</option>';
+    if (filterEpica) filterEpica.innerHTML = '<option value="">Todas las Épicas</option>';
+    if (filterHistoria) filterHistoria.innerHTML = '<option value="">Todas las Historias de Usuario</option>';
+    
+    // Resetear KPI cards a 0
+    const kpiIds = ['plannedTests', 'successfulTests', 'reviewTests', 'pendingTests', 'approvedTests', 'dismissedTests'];
+    kpiIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = '0';
+    });
+    
+    // Resetear velocímetro y círculos de progreso
+    updateProgressPercentage(0);
+    
+    const progressIds = [
+        'designProgressPercentage',
+        'reviewProgressPercentage', 
+        'pendingProgressPercentage',
+        'approvalProgressPercentage',
+        'pendingApprovalProgressPercentage'
+    ];
+    
+    progressIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = '0%';
+        
+        const circleId = id.replace('Percentage', 'Circle');
+        const circle = document.getElementById(circleId);
+        if (circle) {
+            const progressCircle = circle.querySelector('circle:last-child');
+            if (progressCircle) {
+                progressCircle.style.strokeDashoffset = '264';
+            }
+        }
+    });
+    
+    console.log('✅ Datos limpiados correctamente');
+}
+
 // Función para esperar a que XLSX esté disponible
 function waitForXLSX(callback) {
     if (typeof XLSX !== 'undefined') {
@@ -25,6 +87,9 @@ waitForXLSX(() => {
 
 // Modificar el manejador del archivo Excel
 function handleExcelFileWithSheets(file) {
+    // Limpiar todos los datos anteriores antes de cargar el nuevo archivo
+    clearAllData();
+    
     // Verificar que XLSX esté disponible antes de procesar
     if (typeof XLSX === 'undefined') {
         showNotification('Error: La librería XLSX no está cargada. Por favor, recarga la página.', 'error');

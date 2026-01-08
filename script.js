@@ -284,84 +284,31 @@ document.addEventListener('DOMContentLoaded', function() {
     renderDeviationChart(100, 10, realProgress);
 });
 
-// Datos de ejemplo para las pruebas
+// Objeto testData vacío - se llenará solo con datos del Excel
 const testData = {
     projectInfo: {
-        name: 'Building Block - Core',
-        qaResponsible: 'María González',
-        startDate: '01/09/2024',
-        endDate: '30/09/2024',
-        status: 'Pruebas QA',
-        progress: 75
+        name: 'Sin datos',
+        qaResponsible: 'Sin datos',
+        startDate: '',
+        endDate: '',
+        status: '',
+        progress: 0
     },
     summary: {
-        planned: 45,    // Pruebas aún por ejecutar
-        successful: 85, // Pruebas completadas exitosamente
-        failed: 15,     // Pruebas que fallaron
-        pending: 3,     // Pruebas en revisión/pendientes
-        blocked: 2,     // Pruebas bloqueadas
-        dismissed: 0    // Pruebas desestimadas (se calcula desde Excel)
-        // Total inicial sin dismissed fijo
+        planned: 0,
+        successful: 0,
+        failed: 0,
+        pending: 0,
+        blocked: 0,
+        dismissed: 0
     },
-    trend: [
-        { date: '01/09/2024', planned: 150, successful: 0, failed: 0, pending: 0, blocked: 0, dismissed: 0 },   // Día 1: Todo planificado
-        { date: '02/09/2024', planned: 130, successful: 15, failed: 3, pending: 2, blocked: 0, dismissed: 0 },  // Día 2: Empezando
-        { date: '03/09/2024', planned: 108, successful: 28, failed: 6, pending: 6, blocked: 2, dismissed: 0 },  // Día 3: Progresando, 2 bloqueadas
-        { date: '04/09/2024', planned: 88, successful: 42, failed: 8, pending: 10, blocked: 2, dismissed: 0 },  // Día 4: Avanzando
-        { date: '05/09/2024', planned: 72, successful: 55, failed: 12, pending: 8, blocked: 3, dismissed: 0 },  // Día 5: Más progreso, 1 nueva bloqueada
-        { date: '06/09/2024', planned: 58, successful: 68, failed: 14, pending: 8, blocked: 2, dismissed: 0 },  // Día 6: Continuando, desbloqueada 1
-        { date: '07/09/2024', planned: 50, successful: 75, failed: 15, pending: 8, blocked: 2 },  // Día 7: Más avance
-        { date: '08/09/2024', planned: 45, successful: 80, failed: 15, pending: 8, blocked: 2 },  // Día 8: Estado actual
-        { date: '09/09/2024', planned: 45, successful: 85, failed: 15, pending: 3, blocked: 2 },  // Día 9
-        { date: '10/09/2024', planned: 40, successful: 90, failed: 16, pending: 2, blocked: 2 },  // Día 10
-        { date: '11/09/2024', planned: 35, successful: 95, failed: 16, pending: 2, blocked: 2 },  // Día 11
-        { date: '12/09/2024', planned: 30, successful: 100, failed: 17, pending: 1, blocked: 2 }, // Día 12
-        { date: '13/09/2024', planned: 25, successful: 105, failed: 17, pending: 1, blocked: 2 }, // Día 13
-        { date: '14/09/2024', planned: 20, successful: 110, failed: 18, pending: 0, blocked: 2 }, // Día 14
-        { date: '15/09/2024', planned: 15, successful: 115, failed: 18, pending: 0, blocked: 2 }, // Día 15
-        { date: '01/10/2024', planned: 12, successful: 118, failed: 18, pending: 0, blocked: 2 }, // Octubre día 1
-        { date: '02/10/2024', planned: 10, successful: 120, failed: 18, pending: 0, blocked: 2 }, // Octubre día 2
-        { date: '03/10/2024', planned: 8, successful: 122, failed: 18, pending: 0, blocked: 2 },  // Octubre día 3
-        { date: '04/10/2024', planned: 6, successful: 124, failed: 18, pending: 0, blocked: 2 },  // Octubre día 4
-        { date: '05/10/2024', planned: 4, successful: 126, failed: 18, pending: 0, blocked: 2 },  // Octubre día 5
-        { date: '06/10/2024', planned: 2, successful: 128, failed: 18, pending: 0, blocked: 2 },  // Octubre día 6
-        { date: '07/10/2024', planned: 1, successful: 129, failed: 18, pending: 0, blocked: 2 },  // Octubre día 7
-        { date: '08/10/2024', planned: 0, successful: 130, failed: 18, pending: 0, blocked: 2 },  // Octubre día 8
-        { date: '09/10/2024', planned: 0, successful: 132, failed: 18, pending: 0, blocked: 0 },  // Octubre día 9
-        { date: '10/10/2024', planned: 0, successful: 134, failed: 16, pending: 0, blocked: 0 },  // Octubre día 10
-        { date: '11/10/2024', planned: 0, successful: 136, failed: 14, pending: 0, blocked: 0 },  // Octubre día 11
-        { date: '12/10/2024', planned: 0, successful: 138, failed: 12, pending: 0, blocked: 0 },  // Octubre día 12
-        { date: '13/10/2024', planned: 0, successful: 140, failed: 10, pending: 0, blocked: 0 },  // Octubre día 13
-        { date: '14/10/2024', planned: 0, successful: 142, failed: 8, pending: 0, blocked: 0 },   // Octubre día 14 (hoy)
-    ],
-    categories: [
-        { date: '2024-09-28', planned: 128, successful: 102, failed: 11, pending: 5 },
-        { date: '2024-09-29', planned: 130, successful: 105, failed: 8, pending: 7 },
-        { date: '2024-09-30', planned: 132, successful: 108, failed: 12, pending: 4 }
-    ],
-    categories: [
-        { escenario: 'API Tests', planned: 30, successful: 25, failed: 3, pending: 1 },
-        { escenario: 'UI Tests', planned: 28, successful: 20, failed: 5, pending: 2 },
-        { escenario: 'Integration', planned: 25, successful: 18, failed: 4, pending: 1 },
-        { escenario: 'Performance', planned: 18, successful: 12, failed: 2, pending: 1 },
-        { escenario: 'Security', planned: 12, successful: 10, failed: 1, pending: 0 }
-    ],
+    trend: [],
+    categories: [],
     defects: {
-        summary: { critical: 2, high: 5, medium: 8, low: 3 },
-        details: [
-            { id: 'DEF001', title: 'Sistema no responde después de login', severity: 'critical', status: 'Open', escenario: 'API Tests', assignee: 'Ana García', dateFound: '18/09/2024' },
-            { id: 'DEF002', title: 'Error de validación en formulario de registro', severity: 'critical', status: 'Assigned', escenario: 'UI Tests', assignee: 'Carlos López', dateFound: '20/09/2024' },
-            { id: 'DEF003', title: 'Timeout en procesamiento de pagos', severity: 'high', status: 'In Progress DEV', escenario: 'Integration', assignee: 'María Rodríguez', dateFound: '19/09/2024' },
-            { id: 'DEF004', title: 'Interfaz no responsive en móviles', severity: 'high', status: 'Under Review', escenario: 'UI Tests', assignee: 'Pedro Ruiz', dateFound: '21/09/2024' },
-            { id: 'DEF005', title: 'Performance lenta en búsquedas', severity: 'high', status: 'Resolved', escenario: 'Performance', assignee: 'Laura Sánchez', dateFound: '17/09/2024' },
-            { id: 'DEF006', title: 'Mensajes de error poco claros', severity: 'medium', status: 'ReTesting', escenario: 'UI Tests', assignee: 'José Martín', dateFound: '22/09/2024' },
-            { id: 'DEF007', title: 'Falta validación de campos', severity: 'medium', status: 'In Progress DEV', escenario: 'API Tests', assignee: 'Ana García', dateFound: '16/09/2024' },
-            { id: 'DEF008', title: 'Inconsistencia en colores del tema', severity: 'low', status: 'Closed', escenario: 'UI Tests', assignee: 'Carlos López', dateFound: '23/09/2024' },
-            { id: 'DEF009', title: 'Error en validación de email', severity: 'medium', status: 'Reject', escenario: 'API Tests', assignee: 'Ana García', dateFound: '24/09/2024' },
-            { id: 'DEF010', title: 'Problema con scroll en móviles', severity: 'low', status: 'ReOpened', escenario: 'UI Tests', assignee: 'Pedro Ruiz', dateFound: '25/09/2024' }
-        ]
+        summary: { critical: 0, high: 0, medium: 0, low: 0 },
+        details: []
     },
-    testDetails: []  // Tabla vacía por defecto - se llenará con datos del Excel
+    testDetails: []
 };
 
 // Función para forzar actualización anti-caché
@@ -377,52 +324,33 @@ function forcePageRefresh() {
         return;
     }
     
-    // Detectar si hay datos previos en memoria
-    if (typeof testData !== 'undefined' && testData.projectInfo && testData.projectInfo.name !== 'Proyecto de Ejemplo') {
-        console.log('🔄 Datos previos detectados - Limpiando...');
-        resetToDefaultState();
-    }
-    
-    // Agregar timestamp único para evitar caché de GitHub Pages
-    const currentTimestamp = new Date().getTime();
-    if (!window.location.search.includes('_t=')) {
-        const separator = window.location.search ? '&' : '?';
-        const newUrl = window.location.href + separator + '_t=' + currentTimestamp;
-        console.log('🔄 Agregando timestamp anti-caché:', newUrl);
-        // Solo cambiar URL sin recargar si no hay parámetros de timestamp
-        window.history.replaceState({}, '', newUrl);
-    }
-    
     console.log('✅ Limpieza anti-caché completada');
 }
 
 // Función para resetear a estado por defecto
 function resetToDefaultState() {
-    // Resetear testData a valores por defecto
-    if (typeof testData !== 'undefined') {
-        testData.projectInfo = {
-            name: 'Proyecto de Ejemplo',
-            qaResponsible: 'No asignado',
-            startDate: '01/09/2024',
-            endDate: '30/09/2024',
-            status: 'En progreso',
-            progress: 0
-        };
-        
-        testData.summary = {
-            planned: 0,
-            successful: 0,
-            failed: 0,
-            pending: 0,
-            blocked: 0,
-            dismissed: 0
-        };
-    }
+    // Limpiar datos en memoria
+    console.log('🧹 Reseteando estado a valores por defecto...');
     
-    // Limpiar todos los gráficos
-    clearAllCharts();
+    // Limpiar filtros
+    const filterAplicacion = document.getElementById('filterAplicacion');
+    const filterVertical = document.getElementById('filterVertical');
+    const filterEpica = document.getElementById('filterEpica');
+    const filterHistoria = document.getElementById('filterHistoria');
     
-    console.log('✅ Estado reseteado a valores por defecto');
+    if (filterAplicacion) filterAplicacion.innerHTML = '<option value="">Todas las Aplicaciones</option>';
+    if (filterVertical) filterVertical.innerHTML = '<option value="">Todos los Verticales</option>';
+    if (filterEpica) filterEpica.innerHTML = '<option value="">Todas las Épicas</option>';
+    if (filterHistoria) filterHistoria.innerHTML = '<option value="">Todas las Historias de Usuario</option>';
+    
+    // Limpiar tabla
+    const tbody = document.getElementById('testTableBody');
+    if (tbody) tbody.innerHTML = '';
+    
+    // Resetear métricas
+    updateProgressPercentage(0);
+    
+    console.log('✅ Estado reseteado correctamente');
 }
 
 //  Inicializar la aplicación
