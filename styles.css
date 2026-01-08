@@ -278,6 +278,140 @@ body::before {
     font-size: 1rem;
 }
 
+/* Collapsible Header */
+.collapsible-header {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.collapsible-header:hover {
+    background: linear-gradient(135deg, rgba(236, 0, 0, 0.08), rgba(236, 0, 0, 0.04));
+}
+
+.collapse-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.collapse-btn.collapsed {
+    transform: rotate(-180deg);
+}
+
+.collapse-btn:hover {
+    color: var(--primary-dark);
+}
+
+/* Collapsible Content */
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+    padding: 0 1.5rem;
+}
+
+.collapsible-content.expanded {
+    max-height: 2000px;
+    padding: 1.5rem;
+}
+
+/* Ajustes específicos para las secciones más grandes */
+#approvedProgressContent.expanded {
+    max-height: 500px;
+}
+
+#percentagesProgressContent.expanded {
+    max-height: 800px;
+}
+
+/* Delivery Deviation Section */
+.delivery-deviation-section {
+    margin-bottom: 0.75rem;
+}
+
+.deviation-chart-container {
+    padding: 0;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, rgba(236, 0, 0, 0.02), rgba(236, 0, 0, 0.01));
+    border-radius: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-line {
+    width: 30px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+.legend-line.objective {
+    background: #eab308;
+}
+
+.legend-line.progress {
+    background: #22c55e;
+}
+
+.legend-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.chart-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.deviation-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Estilos para los puntos del gráfico */
+.deviation-chart circle {
+    transition: r 0.2s ease, stroke-width 0.2s ease;
+}
+
+.deviation-chart circle:hover {
+    r: 6;
+    stroke-width: 3;
+}
+
+/* Tooltip del gráfico */
+#chartTooltip rect {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+#chartTooltip text {
+    pointer-events: none;
+}
+
 /* Project Title Section */
 .project-title-section {
     padding: 1.5rem 2rem;
@@ -425,7 +559,7 @@ body::before {
 
 /* Individual Progress Section */
 .individual-progress-section {
-    margin-bottom: 2rem;
+    margin-bottom: 0.75rem;
 }
 
 .individual-progress-grid {
@@ -1508,6 +1642,34 @@ body::before {
 .test-table td:nth-child(8),
 .test-table td:nth-child(9) {
     text-align: center;
+}
+
+/* Columna Ver (links) */
+.test-table th:nth-child(10),
+.test-table td:nth-child(10) {
+    text-align: center;
+    width: 60px;
+}
+
+/* Estilos para el ícono de link */
+.link-icon {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    text-decoration: none;
+}
+
+.link-icon:hover {
+    color: var(--primary-dark);
+    transform: scale(1.15);
+}
+
+.link-icon:active {
+    transform: scale(0.95);
 }
 
 .test-table tbody tr:hover {

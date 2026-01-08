@@ -71,12 +71,16 @@
             <!-- Project Information -->
             <section class="project-section">
                 <div class="project-container-modern">
-                    <div class="project-header-modern">
+                    <div class="project-header-modern collapsible-header" onclick="toggleApprovedProgress()">
                         <h3><i class="fas fa-chart-pie"></i>Avance de Diseño de Casos de Prueba Aprobados</h3>
+                        <button class="collapse-btn collapsed" id="approvedProgressBtn" aria-label="Expandir/Colapsar sección">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
                     </div>
-                    <div class="project-title-section">
-                        <div class="percentage-card-centered">
-                            <div class="speedometer" id="generalProgressSpeedometer">
+                    <div class="collapsible-content expanded" id="approvedProgressContent">
+                        <div class="project-title-section">
+                            <div class="percentage-card-centered">
+                                <div class="speedometer" id="generalProgressSpeedometer">
                                 <svg width="300" height="190" viewBox="-10 0 300 190">
                                     <!-- Fondo del arco -->
                                     <path id="speedometerBackground" d="M 40 160 A 100 100 0 0 1 240 160" 
@@ -188,10 +192,14 @@
             <!-- Individual Progress Percentages Section -->
             <section class="individual-progress-section">
                 <div class="project-container-modern">
-                    <div class="project-header-modern">
+                    <div class="project-header-modern collapsible-header" onclick="togglePercentagesProgress()">
                         <h3><i class="fas fa-chart-pie"></i>Porcentajes de Avance</h3>
+                        <button class="collapse-btn collapsed" id="percentagesProgressBtn" aria-label="Expandir/Colapsar sección">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
                     </div>
-                    <div class="individual-progress-grid">
+                    <div class="collapsible-content expanded" id="percentagesProgressContent">
+                        <div class="individual-progress-grid">
                         <div class="progress-indicator-card">
                             <div class="progress-circle-small" id="designProgressCircle">
                                 <svg width="100" height="100">
@@ -248,6 +256,92 @@
                         </div>
                     </div>
                 </div>
+                </div>
+            </section>
+
+            <!-- Desviación de Entregas Section (Collapsible) -->
+            <section class="delivery-deviation-section">
+                <div class="project-container-modern">
+                    <div class="project-header-modern collapsible-header" onclick="toggleDeliveryDeviation()">
+                        <h3>
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Desviación de Entregas
+                        </h3>
+                        <button class="collapse-btn" id="deliveryDeviationBtn" aria-label="Expandir/Colapsar sección">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="collapsible-content" id="deliveryDeviationContent">
+                        <div class="deviation-chart-container">
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-line objective"></span>
+                                    <span class="legend-label">Objetivo Planificado</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-line progress"></span>
+                                    <span class="legend-label">Progreso Real</span>
+                                </div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <svg id="deviationChart" class="deviation-chart" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+                                    <!-- Grid lines -->
+                                    <g class="grid-lines">
+                                        <!-- Horizontal grid lines -->
+                                        <line x1="60" y1="50" x2="750" y2="50" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="60" y1="125" x2="750" y2="125" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="60" y1="200" x2="750" y2="200" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="60" y1="275" x2="750" y2="275" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="5,5"/>
+                                        <line x1="60" y1="350" x2="750" y2="350" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="5,5"/>
+                                    </g>
+                                    
+                                    <!-- Axes -->
+                                    <line x1="60" y1="350" x2="750" y2="350" stroke="#333" stroke-width="2"/>
+                                    <line x1="60" y1="50" x2="60" y2="350" stroke="#333" stroke-width="2"/>
+                                    
+                                    <!-- Y-axis labels -->
+                                    <text x="45" y="55" text-anchor="end" font-size="12" fill="#666">100</text>
+                                    <text x="45" y="130" text-anchor="end" font-size="12" fill="#666">75</text>
+                                    <text x="45" y="205" text-anchor="end" font-size="12" fill="#666">50</text>
+                                    <text x="45" y="280" text-anchor="end" font-size="12" fill="#666">25</text>
+                                    <text x="45" y="355" text-anchor="end" font-size="12" fill="#666">0</text>
+                                    
+                                    <!-- Y-axis title -->
+                                    <text x="20" y="200" text-anchor="middle" font-size="13" font-weight="600" fill="#333" transform="rotate(-90, 20, 200)">
+                                        CP Diseñados (Acumulado)
+                                    </text>
+                                    
+                                    <!-- X-axis labels (will be populated dynamically) -->
+                                    <g id="xAxisLabels"></g>
+                                    
+                                    <!-- X-axis title -->
+                                    <text x="405" y="385" text-anchor="middle" font-size="13" font-weight="600" fill="#333">
+                                        Días Planificados
+                                    </text>
+                                    
+                                    <!-- Chart lines -->
+                                    <g id="chartLines">
+                                        <!-- Objective line (yellow) -->
+                                        <polyline id="objectiveLine" fill="none" stroke="#eab308" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                        
+                                        <!-- Progress line (green) -->
+                                        <polyline id="progressLine" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </g>
+                                    
+                                    <!-- Data points -->
+                                    <g id="dataPoints"></g>
+                                    
+                                    <!-- Tooltip -->
+                                    <g id="chartTooltip" style="display: none; pointer-events: none;">
+                                        <rect x="0" y="0" width="120" height="50" rx="6" fill="#333" opacity="0.95"/>
+                                        <text id="tooltipDay" x="10" y="20" fill="white" font-size="12" font-weight="600"></text>
+                                        <text id="tooltipValue" x="10" y="38" fill="white" font-size="11"></text>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Test Details Table -->
@@ -287,6 +381,7 @@
                                 <th># CP Pendiente<br>(Equipo Desarrollo)</th>
                                 <th># CP Aprobados<br>(Equipo Negocio)</th>
                                 <th># CP Pendiente<br>(Equipo Negocio)</th>
+                                <th>Ver</th>
                             </tr>
                         </thead>
                         <tbody id="testTableBody">

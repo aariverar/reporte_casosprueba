@@ -208,8 +208,21 @@ function updateAplicacionFilter(data) {
     if (!filterSelect) return;
     
     const currentValue = filterSelect.value; // Guardar selección actual
-    const aplicaciones = [...new Set(data.map(row => row['app']).filter(a => a && a.toString().trim() !== ''))];
-    aplicaciones.sort();
+    
+    // Crear mapa para normalizar (mantener la primera ocurrencia con su formato original)
+    const aplicacionesMap = new Map();
+    data.forEach(row => {
+        const app = row['app'];
+        if (app && app.toString().trim() !== '') {
+            const normalizedKey = app.toString().trim().toLowerCase();
+            if (!aplicacionesMap.has(normalizedKey)) {
+                aplicacionesMap.set(normalizedKey, app.toString().trim());
+            }
+        }
+    });
+    
+    const aplicaciones = Array.from(aplicacionesMap.values());
+    aplicaciones.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     
     filterSelect.innerHTML = '<option value="">Todas las Aplicaciones</option>';
     aplicaciones.forEach(app => {
@@ -281,8 +294,20 @@ function updateVerticalFilter(data, preserveValue = null) {
     const filterSelect = document.getElementById('filterVertical');
     if (!filterSelect) return;
     
-    const verticales = [...new Set(data.map(row => row['vertical']).filter(v => v && v.toString().trim() !== ''))];
-    verticales.sort();
+    // Crear mapa para normalizar (mantener la primera ocurrencia con su formato original)
+    const verticalesMap = new Map();
+    data.forEach(row => {
+        const vertical = row['vertical'];
+        if (vertical && vertical.toString().trim() !== '') {
+            const normalizedKey = vertical.toString().trim().toLowerCase();
+            if (!verticalesMap.has(normalizedKey)) {
+                verticalesMap.set(normalizedKey, vertical.toString().trim());
+            }
+        }
+    });
+    
+    const verticales = Array.from(verticalesMap.values());
+    verticales.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     
     filterSelect.innerHTML = '<option value="">Todos los Verticales</option>';
     verticales.forEach(vertical => {
@@ -303,8 +328,20 @@ function updateEpicaFilter(data, preserveValue = null) {
     const filterSelect = document.getElementById('filterEpica');
     if (!filterSelect) return;
     
-    const epicas = [...new Set(data.map(row => row['epica']).filter(e => e && e.toString().trim() !== ''))];
-    epicas.sort();
+    // Crear mapa para normalizar (mantener la primera ocurrencia con su formato original)
+    const epicasMap = new Map();
+    data.forEach(row => {
+        const epica = row['epica'];
+        if (epica && epica.toString().trim() !== '') {
+            const normalizedKey = epica.toString().trim().toLowerCase();
+            if (!epicasMap.has(normalizedKey)) {
+                epicasMap.set(normalizedKey, epica.toString().trim());
+            }
+        }
+    });
+    
+    const epicas = Array.from(epicasMap.values());
+    epicas.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     
     filterSelect.innerHTML = '<option value="">Todas las Épicas</option>';
     epicas.forEach(epica => {
@@ -325,8 +362,20 @@ function updateHistoriaFilter(data, preserveValue = null) {
     const filterSelect = document.getElementById('filterHistoria');
     if (!filterSelect) return;
     
-    const historias = [...new Set(data.map(row => row['hu']).filter(h => h && h.toString().trim() !== ''))];
-    historias.sort();
+    // Crear mapa para normalizar (mantener la primera ocurrencia con su formato original)
+    const historiasMap = new Map();
+    data.forEach(row => {
+        const historia = row['hu'];
+        if (historia && historia.toString().trim() !== '') {
+            const normalizedKey = historia.toString().trim().toLowerCase();
+            if (!historiasMap.has(normalizedKey)) {
+                historiasMap.set(normalizedKey, historia.toString().trim());
+            }
+        }
+    });
+    
+    const historias = Array.from(historiasMap.values());
+    historias.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     
     filterSelect.innerHTML = '<option value="">Todas las Historias de Usuario</option>';
     historias.forEach(historia => {
@@ -488,7 +537,7 @@ function renderTableWithPagination() {
     
     if (totalItems === 0) {
         const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="9" style="text-align: center; padding: 2rem; color: #999;">No se encontraron resultados</td>';
+        tr.innerHTML = '<td colspan="10" style="text-align: center; padding: 2rem; color: #999;">No se encontraron resultados</td>';
         tbody.appendChild(tr);
         updateTablePaginationControls(0, 0);
         return;
@@ -521,6 +570,17 @@ function renderTableWithPagination() {
         const cpAprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
         const cpPendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
         const cpPendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
+        const link = row['link'] || '';
+        
+        // Crear el HTML del link
+        let linkHTML = '<td style="text-align: center;">-</td>';
+        if (link && link.trim() !== '') {
+            linkHTML = `<td style="text-align: center;">
+                <a href="${link.trim()}" target="_blank" rel="noopener noreferrer" class="link-icon" title="Ver enlace">
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </td>`;
+        }
         
         tr.innerHTML = `
             <td>${row['app'] || '-'}</td>
@@ -532,6 +592,7 @@ function renderTableWithPagination() {
             <td>${cpPendienteDev}</td>
             <td>${cpAprobadoNeg}</td>
             <td>${cpPendienteNeg}</td>
+            ${linkHTML}
         `;
         tbody.appendChild(tr);
     });

@@ -10,6 +10,280 @@ const colors = {
 // Variable global para almacenar los datos cargados del Excel
 let loadedExcelData = null;
 
+// Función para alternar la sección de Avance de Casos de Prueba Aprobados
+function toggleApprovedProgress() {
+    const content = document.getElementById('approvedProgressContent');
+    const btn = document.getElementById('approvedProgressBtn');
+    
+    if (!content || !btn) return;
+    
+    if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        btn.classList.remove('collapsed');
+    } else {
+        content.classList.add('expanded');
+        btn.classList.add('collapsed');
+    }
+}
+
+// Función para alternar la sección de Porcentajes de Avance
+function togglePercentagesProgress() {
+    const content = document.getElementById('percentagesProgressContent');
+    const btn = document.getElementById('percentagesProgressBtn');
+    
+    if (!content || !btn) return;
+    
+    if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        btn.classList.remove('collapsed');
+    } else {
+        content.classList.add('expanded');
+        btn.classList.add('collapsed');
+    }
+}
+
+// Función para alternar la sección de Desviación de Entregas
+function toggleDeliveryDeviation() {
+    const content = document.getElementById('deliveryDeviationContent');
+    const btn = document.getElementById('deliveryDeviationBtn');
+    
+    if (!content || !btn) return;
+    
+    if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        btn.classList.remove('collapsed');
+    } else {
+        content.classList.add('expanded');
+        btn.classList.add('collapsed');
+    }
+}
+
+// Función para renderizar el gráfico de desviación de entregas
+function renderDeviationChart(totalCP = 100, plannedDays = 10, realProgressPerDay = null) {
+    // Calcular CP por día (objetivo)
+    const cpPerDay = totalCP / plannedDays;
+    
+    // Generar datos de objetivo (línea recta ascendente - acumulado)
+    const objectiveData = [];
+    for (let day = 0; day <= plannedDays; day++) {
+        const accumulated = cpPerDay * day;
+        objectiveData.push({
+            day: day,
+            value: Math.min(totalCP, accumulated)
+        });
+    }
+    
+    // Generar datos de progreso real (acumulado)
+    // Si no se proporciona progreso real, simular con variación
+    const progressData = [];
+    let currentAccumulated = 0;
+    
+    if (!realProgressPerDay || realProgressPerDay.length === 0) {
+        // Simular progreso real con variación (puede ser más o menos de 10 por día)
+        for (let day = 0; day <= plannedDays; day++) {
+            if (day === 0) {
+                progressData.push({ day: 0, value: 0 });
+            } else {
+                // Simular variación: algunos días se hacen más, otros menos
+                const dailyProgress = cpPerDay * (0.7 + Math.random() * 0.6); // Entre 70% y 130% del objetivo
+                currentAccumulated = Math.min(totalCP, currentAccumulated + dailyProgress);
+                progressData.push({
+                    day: day,
+                    value: currentAccumulated
+                });
+            }
+        }
+    } else {
+        // Usar datos reales proporcionados
+        progressData.push({ day: 0, value: 0 });
+        for (let day = 1; day <= Math.min(plannedDays, realProgressPerDay.length); day++) {
+            currentAccumulated += realProgressPerDay[day - 1];
+            progressData.push({
+                day: day,
+                value: Math.min(totalCP, currentAccumulated)
+            });
+        }
+    }
+    
+    // Configuración del gráfico
+    const chartWidth = 690; // 750 - 60 (margen izquierdo)
+    const chartHeight = 300; // 350 - 50 (margen superior)
+    const xStart = 60;
+    const yStart = 50;
+    
+    // Escalar datos a coordenadas SVG
+    const scaleX = chartWidth / plannedDays;
+    const scaleY = chartHeight / totalCP;
+    
+    // Generar puntos para la línea de objetivo
+    const objectivePoints = objectiveData.map(d => {
+        const x = xStart + (d.day * scaleX);
+        const y = yStart + chartHeight - (d.value * scaleY);
+        return `${x},${y}`;
+    }).join(' ');
+    
+    // Generar puntos para la línea de progreso
+    const progressPoints = progressData.map(d => {
+        const x = xStart + (d.day * scaleX);
+        const y = yStart + chartHeight - (d.value * scaleY);
+        return `${x},${y}`;
+    }).join(' ');
+    
+    // Actualizar las líneas
+    const objectiveLine = document.getElementById('objectiveLine');
+    const progressLine = document.getElementById('progressLine');
+    
+    if (objectiveLine) objectiveLine.setAttribute('points', objectivePoints);
+    if (progressLine) progressLine.setAttribute('points', progressPoints);
+    
+    // Generar etiquetas del eje X
+    const xAxisLabels = document.getElementById('xAxisLabels');
+    if (xAxisLabels) {
+        xAxisLabels.innerHTML = '';
+        const labelInterval = Math.max(1, Math.ceil(plannedDays / 10)); // Mostrar máximo 10 etiquetas
+        
+        for (let day = 0; day <= plannedDays; day += labelInterval) {
+            const x = xStart + (day * scaleX);
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', x);
+            label.setAttribute('y', 370);
+            label.setAttribute('text-anchor', 'middle');
+            label.setAttribute('font-size', '12');
+            label.setAttribute('fill', '#666');
+            label.textContent = day;
+            xAxisLabels.appendChild(label);
+        }
+    }
+    
+    // Generar puntos de datos
+    const dataPoints = document.getElementById('dataPoints');
+    if (dataPoints) {
+        dataPoints.innerHTML = '';
+        
+        const pointInterval = Math.max(1, Math.ceil(plannedDays / 15)); // Mostrar puntos espaciados
+        
+        // Agregar puntos para objetivo
+        for (let i = 0; i < objectiveData.length; i += pointInterval) {
+            const d = objectiveData[i];
+            const x = xStart + (d.day * scaleX);
+            const y = yStart + chartHeight - (d.value * scaleY);
+            
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', '4');
+            circle.setAttribute('fill', '#eab308');
+            circle.setAttribute('stroke', 'white');
+            circle.setAttribute('stroke-width', '2');
+            circle.style.cursor = 'pointer';
+            
+            // Agregar eventos de tooltip
+            circle.addEventListener('mouseenter', (e) => showTooltip(d.day, d.value, 'Objetivo', x, y));
+            circle.addEventListener('mouseleave', hideTooltip);
+            
+            dataPoints.appendChild(circle);
+        }
+        
+        // Agregar puntos para progreso
+        for (let i = 0; i < progressData.length; i += pointInterval) {
+            const d = progressData[i];
+            const x = xStart + (d.day * scaleX);
+            const y = yStart + chartHeight - (d.value * scaleY);
+            
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', '4');
+            circle.setAttribute('fill', '#22c55e');
+            circle.setAttribute('stroke', 'white');
+            circle.setAttribute('stroke-width', '2');
+            circle.style.cursor = 'pointer';
+            
+            // Agregar eventos de tooltip
+            circle.addEventListener('mouseenter', (e) => showTooltip(d.day, d.value, 'Progreso Real', x, y));
+            circle.addEventListener('mouseleave', hideTooltip);
+            
+            dataPoints.appendChild(circle);
+        }
+    }
+}
+
+// Función para mostrar el tooltip
+function showTooltip(day, value, type, x, y) {
+    const tooltip = document.getElementById('chartTooltip');
+    const tooltipDay = document.getElementById('tooltipDay');
+    const tooltipValue = document.getElementById('tooltipValue');
+    
+    if (!tooltip || !tooltipDay || !tooltipValue) return;
+    
+    // Configurar contenido del tooltip
+    tooltipDay.textContent = `Día ${day} - ${type}`;
+    tooltipValue.textContent = `CP Acumulados: ${Math.round(value)}`;
+    
+    // Obtener dimensiones del tooltip
+    const tooltipWidth = 140;
+    const tooltipHeight = 50;
+    
+    // Posicionar el tooltip
+    let tooltipX = x + 10;
+    let tooltipY = y - tooltipHeight - 10;
+    
+    // Ajustar si se sale del área visible
+    if (tooltipX + tooltipWidth > 750) {
+        tooltipX = x - tooltipWidth - 10;
+    }
+    if (tooltipY < 50) {
+        tooltipY = y + 10;
+    }
+    
+    // Actualizar posición del rectángulo del tooltip
+    const tooltipRect = tooltip.querySelector('rect');
+    if (tooltipRect) {
+        tooltipRect.setAttribute('x', tooltipX);
+        tooltipRect.setAttribute('y', tooltipY);
+        tooltipRect.setAttribute('width', tooltipWidth);
+    }
+    
+    // Actualizar posición de los textos
+    tooltipDay.setAttribute('x', tooltipX + 10);
+    tooltipDay.setAttribute('y', tooltipY + 20);
+    tooltipValue.setAttribute('x', tooltipX + 10);
+    tooltipValue.setAttribute('y', tooltipY + 38);
+    
+    // Mostrar tooltip
+    tooltip.style.display = 'block';
+}
+
+// Función para ocultar el tooltip
+function hideTooltip() {
+    const tooltip = document.getElementById('chartTooltip');
+    if (tooltip) {
+        tooltip.style.display = 'none';
+    }
+}
+
+// Inicializar el gráfico con datos de ejemplo
+// Ejemplo: 100 CP en 10 días = 10 CP por día objetivo
+// Progreso real con variación: algunos días arriba, otros abajo del objetivo
+document.addEventListener('DOMContentLoaded', function() {
+    // Ejemplo realista: 100 CP en 10 días
+    // Variación más amplia para ver mejor las diferencias
+    const realProgress = [
+        5,   // Día 1: 5 CP (muy abajo del objetivo de 10) - Inicio lento
+        6,   // Día 2: 6 CP (acumulado: 11, objetivo: 20) - Seguimos atrás
+        8,   // Día 3: 8 CP (acumulado: 19, objetivo: 30) - Aún retrasados
+        15,  // Día 4: 15 CP (acumulado: 34, objetivo: 40) - Recuperando
+        18,  // Día 5: 18 CP (acumulado: 52, objetivo: 50) - ¡Superamos!
+        14,  // Día 6: 14 CP (acumulado: 66, objetivo: 60) - Mantenemos ventaja
+        7,   // Día 7: 7 CP (acumulado: 73, objetivo: 70) - Bajamos ritmo
+        9,   // Día 8: 9 CP (acumulado: 82, objetivo: 80) - Ligera ventaja
+        11,  // Día 9: 11 CP (acumulado: 93, objetivo: 90) - Casi ahí
+        7    // Día 10: 7 CP (acumulado: 100, objetivo: 100) - ¡Meta cumplida!
+    ];
+    
+    renderDeviationChart(100, 10, realProgress);
+});
+
 // Datos de ejemplo para las pruebas
 const testData = {
     projectInfo: {
