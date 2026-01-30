@@ -311,15 +311,18 @@ function updateCascadeFilters() {
     const filterVertical = document.getElementById('filterVertical');
     const filterEpica = document.getElementById('filterEpica');
     const filterHistoria = document.getElementById('filterHistoria');
+    const filterEstadoHU = document.getElementById('filterEstadoHU');
     
     const selectedAplicacion = filterAplicacion ? filterAplicacion.value : '';
     const selectedVertical = filterVertical ? filterVertical.value : '';
     const selectedEpica = filterEpica ? filterEpica.value : '';
+    const selectedHistoria = filterHistoria ? filterHistoria.value : '';
     
     // Guardar valores actuales
     const currentVertical = selectedVertical;
     const currentEpica = selectedEpica;
-    const currentHistoria = filterHistoria ? filterHistoria.value : '';
+    const currentHistoria = selectedHistoria;
+    const currentEstadoHU = filterEstadoHU ? filterEstadoHU.value : '';
     
     // Filtrar datos según las selecciones previas
     let filteredData = window.currentTableData;
@@ -352,6 +355,22 @@ function updateCascadeFilters() {
         filteredData = filteredData.filter(row => row['epica'] === selectedEpica);
     }
     updateHistoriaFilter(filteredData, currentHistoria);
+    
+    // Actualizar Estado HU basándose en Aplicación + Vertical + Épica + Historia
+    filteredData = window.currentTableData;
+    if (selectedAplicacion) {
+        filteredData = filteredData.filter(row => row['app'] === selectedAplicacion);
+    }
+    if (selectedVertical) {
+        filteredData = filteredData.filter(row => row['vertical'] === selectedVertical);
+    }
+    if (selectedEpica) {
+        filteredData = filteredData.filter(row => row['epica'] === selectedEpica);
+    }
+    if (selectedHistoria) {
+        filteredData = filteredData.filter(row => row['hu'] === selectedHistoria);
+    }
+    updateEstadoHUFilter(filteredData, currentEstadoHU);
 }
 
 // Actualizar filtro de verticales
@@ -456,12 +475,47 @@ function updateHistoriaFilter(data, preserveValue = null) {
     }
 }
 
+// Actualizar filtro de Estado HU
+function updateEstadoHUFilter(data, preserveValue = null) {
+    const filterSelect = document.getElementById('filterEstadoHU');
+    if (!filterSelect) return;
+    
+    // Crear mapa para normalizar (mantener la primera ocurrencia con su formato original)
+    const estadosMap = new Map();
+    data.forEach(row => {
+        const estado = row['estado_hu'];
+        if (estado && estado.toString().trim() !== '') {
+            const normalizedKey = estado.toString().trim().toLowerCase();
+            if (!estadosMap.has(normalizedKey)) {
+                estadosMap.set(normalizedKey, estado.toString().trim());
+            }
+        }
+    });
+    
+    const estados = Array.from(estadosMap.values());
+    estados.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+    
+    filterSelect.innerHTML = '<option value="">Todos los Estados HU</option>';
+    estados.forEach(estado => {
+        const option = document.createElement('option');
+        option.value = estado;
+        option.textContent = estado;
+        filterSelect.appendChild(option);
+    });
+    
+    // Restaurar valor si existe en las opciones disponibles
+    if (preserveValue && estados.includes(preserveValue)) {
+        filterSelect.value = preserveValue;
+    }
+}
+
 // Configurar filtros de tabla
 function setupTableFilters() {
     const filterAplicacion = document.getElementById('filterAplicacion');
     const filterVertical = document.getElementById('filterVertical');
     const filterEpica = document.getElementById('filterEpica');
     const filterHistoria = document.getElementById('filterHistoria');
+    const filterEstadoHU = document.getElementById('filterEstadoHU');
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
     const prevPageBtn = document.getElementById('prevPageBtn');
@@ -485,6 +539,11 @@ function setupTableFilters() {
     if (filterHistoria) {
         filterHistoria.removeEventListener('change', handleFilterChange);
         filterHistoria.addEventListener('change', handleFilterChange);
+    }
+    
+    if (filterEstadoHU) {
+        filterEstadoHU.removeEventListener('change', handleFilterChange);
+        filterEstadoHU.addEventListener('change', handleFilterChange);
     }
     
     if (clearFiltersBtn) {
@@ -520,12 +579,14 @@ function clearAllFilters() {
     const filterVertical = document.getElementById('filterVertical');
     const filterEpica = document.getElementById('filterEpica');
     const filterHistoria = document.getElementById('filterHistoria');
+    const filterEstadoHU = document.getElementById('filterEstadoHU');
     
     // Resetear todos los filtros a su valor por defecto
     if (filterAplicacion) filterAplicacion.value = '';
     if (filterVertical) filterVertical.value = '';
     if (filterEpica) filterEpica.value = '';
     if (filterHistoria) filterHistoria.value = '';
+    if (filterEstadoHU) filterEstadoHU.value = '';
     
     // Actualizar todos los filtros con datos completos
     if (window.currentTableData) {
@@ -552,11 +613,13 @@ function applyTableFilters() {
     const filterVertical = document.getElementById('filterVertical');
     const filterEpica = document.getElementById('filterEpica');
     const filterHistoria = document.getElementById('filterHistoria');
+    const filterEstadoHU = document.getElementById('filterEstadoHU');
     
     const selectedAplicacion = filterAplicacion ? filterAplicacion.value : '';
     const selectedVertical = filterVertical ? filterVertical.value : '';
     const selectedEpica = filterEpica ? filterEpica.value : '';
     const selectedHistoria = filterHistoria ? filterHistoria.value : '';
+    const selectedEstadoHU = filterEstadoHU ? filterEstadoHU.value : '';
     
     // Filtrar datos
     let filteredData = window.currentTableData;
@@ -579,6 +642,11 @@ function applyTableFilters() {
     // Filtrar por historia de usuario
     if (selectedHistoria) {
         filteredData = filteredData.filter(row => row['hu'] === selectedHistoria);
+    }
+    
+    // Filtrar por estado HU
+    if (selectedEstadoHU) {
+        filteredData = filteredData.filter(row => row['estado_hu'] === selectedEstadoHU);
     }
     
     // Guardar datos filtrados globalmente
