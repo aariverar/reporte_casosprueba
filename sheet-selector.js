@@ -602,7 +602,7 @@ function renderTableWithPagination() {
     
     if (totalItems === 0) {
         const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="10" style="text-align: center; padding: 2rem; color: #999;">No se encontraron resultados</td>';
+        tr.innerHTML = '<td colspan="11" style="text-align: center; padding: 2rem; color: #999;">No se encontraron resultados</td>';
         tbody.appendChild(tr);
         updateTablePaginationControls(0, 0);
         return;
@@ -635,6 +635,7 @@ function renderTableWithPagination() {
         const cpAprobadoNeg = parseInt(row['cp_aprobado_neg']) || 0;
         const cpPendienteDev = parseInt(row['cp_pendiente_dev']) || 0;
         const cpPendienteNeg = parseInt(row['cp_pendiente_neg']) || 0;
+        const estadoHU = row['estado_hu'] || '-';
         const link = row['link'] || '';
         
         // Crear el HTML del link
@@ -652,6 +653,7 @@ function renderTableWithPagination() {
             <td>${row['vertical'] || '-'}</td>
             <td>${row['epica'] || '-'}</td>
             <td>${row['hu'] || '-'}</td>
+            <td>${estadoHU}</td>
             <td>${cpDiseñados}</td>
             <td>${cpAprobadoDev}</td>
             <td>${cpPendienteDev}</td>

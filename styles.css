@@ -1619,34 +1619,42 @@ body::before {
     color: var(--text-primary);
 }
 
-/* Reducir tamaño de columnas numéricas con dos líneas */
+/* Columna Estado HU */
 .test-table th:nth-child(5),
+.test-table td:nth-child(5) {
+    text-align: center;
+    font-weight: 600;
+    min-width: 100px;
+}
+
+/* Reducir tamaño de columnas numéricas con dos líneas */
 .test-table th:nth-child(6),
 .test-table th:nth-child(7),
 .test-table th:nth-child(8),
-.test-table th:nth-child(9) {
+.test-table th:nth-child(9),
+.test-table th:nth-child(10) {
     font-size: 0.65rem;
     line-height: 1.2;
     padding: 0.5rem 0.3rem;
 }
 
 /* Centrar columnas numéricas (Criterios, Diseñados, Revisados, Aprobados, Pendientes) */
-.test-table th:nth-child(5),
 .test-table th:nth-child(6),
 .test-table th:nth-child(7),
 .test-table th:nth-child(8),
 .test-table th:nth-child(9),
-.test-table td:nth-child(5),
+.test-table th:nth-child(10),
 .test-table td:nth-child(6),
 .test-table td:nth-child(7),
 .test-table td:nth-child(8),
-.test-table td:nth-child(9) {
+.test-table td:nth-child(9),
+.test-table td:nth-child(10) {
     text-align: center;
 }
 
 /* Columna Ver (links) */
-.test-table th:nth-child(10),
-.test-table td:nth-child(10) {
+.test-table th:nth-child(11),
+.test-table td:nth-child(11) {
     text-align: center;
     width: 60px;
 }
